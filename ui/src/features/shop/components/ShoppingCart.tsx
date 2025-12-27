@@ -14,7 +14,7 @@ export const ShoppingCart = () => {
         flexDirection: 'column',
         background: colors.inventory.background,
         border: `1px solid ${colors.primary.alpha(0.3)}`,
-        borderRadius: '5px',
+        borderRadius: '0.26vw',
         overflow: 'hidden',
       }}
     >

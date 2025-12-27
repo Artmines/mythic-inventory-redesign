@@ -41,7 +41,7 @@ export const CartItemsList = () => {
         overflow: 'auto',
         padding: '1vh',
         '&::-webkit-scrollbar': {
-          width: '4px',
+          width: '0.21vw',
         },
         '&::-webkit-scrollbar-thumb': {
           background: colors.primary.alpha(0.6),

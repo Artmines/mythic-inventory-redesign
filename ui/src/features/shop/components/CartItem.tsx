@@ -62,7 +62,7 @@ const CartItemComponent = ({ cartItem }: CartItemProps) => {
             gap: '0.8vh',
             background: colors.primary.alpha(0.1),
             border: `1px solid ${colors.primary.alpha(0.2)}`,
-            borderRadius: '8px',
+            borderRadius: '0.42vw',
             padding: '1vh 0.8vh',
             marginBottom: '0.5vh',
             transition: 'all 0.2s ease',
@@ -77,8 +77,8 @@ const CartItemComponent = ({ cartItem }: CartItemProps) => {
             component="img"
             src={getItemImage(cartItem.itemName)}
             sx={{
-              width: '40px',
-              height: '40px',
+              width: '2.78vh',
+              height: '2.78vh',
               objectFit: 'contain',
             }}
           />
@@ -124,8 +124,8 @@ const CartItemComponent = ({ cartItem }: CartItemProps) => {
             size="small"
             sx={{
               color: colors.error.light,
-              padding: '6px',
-              minWidth: '32px',
+              padding: '0.42vh 0.31vw',
+              minWidth: '1.67vw',
               '&:hover': {
                 background: colors.error.lightAlpha(0.1),
                 color: colors.error.dark,

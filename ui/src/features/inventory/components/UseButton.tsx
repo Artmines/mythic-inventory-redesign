@@ -58,8 +58,8 @@ export const UseButton = () => {
       <Box
         onMouseUp={handleUseItem}
         sx={{
-          width: '150px',
-          height: '140px',
+          width: '12.96vh',
+          height: '12.96vh',
           position: 'absolute',
           top: 0,
           bottom: 0,
@@ -70,10 +70,10 @@ export const UseButton = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '12px',
+          gap: '1.11vh',
           background: colors.inventory.background,
           border: `2px solid ${colors.primary.alpha(0.4)}`,
-          borderRadius: '12px',
+          borderRadius: '0.63vw',
           boxShadow: `0 0 20px ${colors.primary.alpha(0.3)}, inset 0 0 20px ${colors.primary.alpha(0.1)}`,
           transition: 'all 0.2s ease',
           cursor: 'pointer',
@@ -91,14 +91,14 @@ export const UseButton = () => {
       >
         <Fingerprint
           sx={{
-            fontSize: '64px',
+            fontSize: '4.44vh',
             color: colors.primary.main,
             filter: `drop-shadow(0 0 12px ${colors.primary.alpha(0.6)})`,
           }}
         />
         <Typography
           sx={{
-            fontSize: '14px',
+            fontSize: '0.97vh',
             fontWeight: 700,
             fontFamily: 'Rubik, sans-serif',
             color: colors.primary.main,

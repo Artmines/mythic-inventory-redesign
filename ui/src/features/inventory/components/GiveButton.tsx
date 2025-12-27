@@ -81,10 +81,10 @@ export const GiveButton = () => {
       <Box
         onMouseUp={handleMouseUp}
         sx={{
-          width: '150px',
-          height: '140px',
+          width: '12.96vh',
+          height: '12.96vh',
           position: 'absolute',
-          top: 'calc(50% + 100px)',
+          top: 'calc(50% + 9.26vh)',
           left: 0,
           right: 0,
           margin: '0 auto',
@@ -92,10 +92,10 @@ export const GiveButton = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '12px',
+          gap: '1.11vh',
           background: colors.inventory.background,
           border: `2px solid ${colors.primary.alpha(0.4)}`,
-          borderRadius: '12px',
+          borderRadius: '0.63vw',
           boxShadow: `0 0 20px ${colors.primary.alpha(0.3)}, inset 0 0 20px ${colors.primary.alpha(0.1)}`,
           transition: 'all 0.2s ease',
           cursor: 'pointer',
@@ -113,14 +113,14 @@ export const GiveButton = () => {
       >
         <PanTool
           sx={{
-            fontSize: '64px',
+            fontSize: '4.44vh',
             color: colors.primary.main,
             filter: `drop-shadow(0 0 12px ${colors.primary.alpha(0.6)})`,
           }}
         />
         <Typography
           sx={{
-            fontSize: '14px',
+            fontSize: '0.97vh',
             fontWeight: 700,
             fontFamily: 'Rubik, sans-serif',
             color: colors.primary.main,

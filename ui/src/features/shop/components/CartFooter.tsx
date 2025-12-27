@@ -59,7 +59,7 @@ export const CartFooter = () => {
           alignItems: 'center',
           padding: '1vh',
           background: colors.secondary.darkAlpha(0.5),
-          borderRadius: '8px',
+          borderRadius: '0.42vw',
         }}
       >
         <Typography
@@ -132,7 +132,7 @@ export const CartFooter = () => {
         disabled={!canPurchase}
         fullWidth
         sx={{
-          height: '45px',
+          height: '3.13vh',
           color: 'white',
           fontWeight: 600,
           fontFamily: 'Rubik, sans-serif',
@@ -143,7 +143,7 @@ export const CartFooter = () => {
           border: canPurchase
             ? `1px solid ${colors.primary.alpha(0.6)}`
             : `1px solid ${colors.grey.alpha(0.5)}`,
-          borderRadius: '8px',
+          borderRadius: '0.42vw',
           textTransform: 'none',
           textShadow,
           transition: 'all 0.2s ease',

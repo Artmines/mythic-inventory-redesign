@@ -61,7 +61,7 @@ export const SplitDialog = ({
           sx: {
             background: 'linear-gradient(to-br, rgba(26, 26, 26, 0.95), rgba(10, 10, 10, 0.95))',
             border: `1px solid ${colors.primary.alpha(0.3)}`,
-            borderRadius: '12px',
+            borderRadius: '0.63vw',
             boxShadow: `0 8px 32px ${colors.primary.alpha(0.2)}`,
           },
         },
@@ -93,7 +93,7 @@ export const SplitDialog = ({
           sx={{
             background: `linear-gradient(135deg, ${colors.primary.alpha(0.2)}, rgba(84, 65, 209, 0.1))`,
             border: `1px solid ${colors.primary.alpha(0.3)}`,
-            borderRadius: '8px',
+            borderRadius: '0.42vw',
             color: colors.text.primary,
             fontFamily: 'Rubik, sans-serif',
             fontWeight: 600,

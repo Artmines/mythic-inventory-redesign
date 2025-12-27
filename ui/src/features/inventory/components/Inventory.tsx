@@ -140,7 +140,7 @@ export const Inventory = () => {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '200px',
+            gap: '10.42vw',
             userSelect: 'none',
             width: '100%',
             height: '100%',
@@ -150,7 +150,7 @@ export const Inventory = () => {
             {/* Hotbar Section with Background */}
             <Box sx={{
               background: colors.inventory.background,
-              borderRadius: '5px',
+              borderRadius: '0.26vw',
               border: `1px solid ${colors.primary.alpha(0.3)}`,
               padding: '0.5vw',
               display: 'flex',
@@ -186,9 +186,8 @@ export const Inventory = () => {
               <Box
                 sx={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: '8px',
-                  minWidth: '700px',
+                  gridTemplateColumns: 'repeat(5, 8.68vh)',
+                  gap: '0.74vh',
                 }}
               >
                 {Array.from({ length: 5 }).map((_, index) => {
@@ -211,7 +210,7 @@ export const Inventory = () => {
             {/* Main Storage Section with Background */}
             <Box sx={{
               background: colors.inventory.background,
-              borderRadius: '5px',
+              borderRadius: '0.26vw',
               border: `1px solid ${colors.primary.alpha(0.3)}`,
               padding: '0.5vw',
               display: 'flex',
@@ -261,14 +260,13 @@ export const Inventory = () => {
               <Box
                 sx={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: '8px',
+                  gridTemplateColumns: 'repeat(5, 8.68vh)',
+                  gap: '0.74vh',
                   maxHeight: 'calc(60vh - 90px)',
                   overflowY: 'scroll',
-                  minWidth: '700px',
-                  paddingRight: '8px',
+                  paddingRight: '0.74vh',
                   '&::-webkit-scrollbar': {
-                    width: '4px',
+                    width: '0.37vh',
                   },
                   '&::-webkit-scrollbar-thumb': {
                     background: colors.primary.alpha(0.6),
@@ -307,7 +305,7 @@ export const Inventory = () => {
               {/* Secondary Inventory Section with Background */}
               <Box sx={{
                 background: colors.inventory.background,
-                borderRadius: '5px',
+                borderRadius: '0.26vw',
                 border: `1px solid ${colors.primary.alpha(0.3)}`,
                 padding: '0.5vw',
                 display: 'flex',
@@ -358,14 +356,13 @@ export const Inventory = () => {
                 <Box
                   sx={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(5, 1fr)',
-                    gap: '8px',
+                    gridTemplateColumns: 'repeat(5, 8.68vh)',
+                    gap: '0.74vh',
                     maxHeight: 'calc(60vh - 90px)',
                     overflowY: 'scroll',
-                    minWidth: '700px',
-                    paddingRight: '8px',
+                    paddingRight: '0.74vh',
                     '&::-webkit-scrollbar': {
-                      width: '4px',
+                      width: '0.37vh',
                     },
                     '&::-webkit-scrollbar-thumb': {
                       background: colors.primary.alpha(0.6),

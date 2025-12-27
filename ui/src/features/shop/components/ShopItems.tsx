@@ -42,13 +42,13 @@ export const ShopItems = () => {
         width: '100%',
         height: '100%',
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '14px',
-        padding: '1.5vw',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(15vh, 1fr))',
+        gap: '0.97vh',
+        padding: '1.5vh',
         overflow: 'auto',
         willChange: 'scroll-position',
         '&::-webkit-scrollbar': {
-          width: '6px',
+          width: '0.56vh',
         },
         '&::-webkit-scrollbar-thumb': {
           background: colors.primary.alpha(0.6),

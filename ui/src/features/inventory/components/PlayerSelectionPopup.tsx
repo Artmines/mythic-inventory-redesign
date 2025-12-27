@@ -51,12 +51,12 @@ export const PlayerSelectionPopup = () => {
           left: 0,
           right: 0,
           margin: 'auto',
-          width: '400px',
+          width: '20.83vw',
           height: 'fit-content',
-          maxHeight: '500px',
+          maxHeight: '46.3vh',
           background: colors.inventory.background,
           border: `2px solid ${colors.primary.alpha(0.4)}`,
-          borderRadius: '12px',
+          borderRadius: '0.63vw',
           boxShadow: `0 0 30px ${colors.primary.alpha(0.5)}`,
           display: 'flex',
           flexDirection: 'column',
@@ -67,7 +67,7 @@ export const PlayerSelectionPopup = () => {
         {/* Header */}
         <Box
           sx={{
-            padding: '20px',
+            padding: '1.39vh 1.04vw',
             borderBottom: `1px solid ${colors.primary.alpha(0.2)}`,
             display: 'flex',
             justifyContent: 'space-between',
@@ -76,7 +76,7 @@ export const PlayerSelectionPopup = () => {
         >
           <Typography
             sx={{
-              fontSize: '18px',
+              fontSize: '1.25vh',
               fontWeight: 700,
               fontFamily: 'Rubik, sans-serif',
               color: colors.primary.main,
@@ -91,7 +91,7 @@ export const PlayerSelectionPopup = () => {
             sx={{
               cursor: 'pointer',
               color: colors.text.secondary,
-              fontSize: '20px',
+              fontSize: '1.39vh',
               transition: 'color 0.2s',
               '&:hover': {
                 color: colors.primary.main,
@@ -105,11 +105,11 @@ export const PlayerSelectionPopup = () => {
         {/* Player List */}
         <Box
           sx={{
-            padding: '10px',
+            padding: '0.69vh 0.52vw',
             overflowY: 'auto',
-            maxHeight: '400px',
+            maxHeight: '37.04vh',
             '&::-webkit-scrollbar': {
-              width: '8px',
+              width: '0.42vw',
             },
             '&::-webkit-scrollbar-track': {
               background: colors.secondary.darkAlpha(0.2),
@@ -131,12 +131,12 @@ export const PlayerSelectionPopup = () => {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '15px',
-                padding: '15px',
-                margin: '5px 0',
+                gap: '0.78vw',
+                padding: '1.04vh 0.78vw',
+                margin: '0.35vh 0',
                 background: colors.primary.alpha(0.05),
                 border: `1px solid ${colors.primary.alpha(0.2)}`,
-                borderRadius: '8px',
+                borderRadius: '0.42vw',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 '&:hover': {
@@ -148,8 +148,8 @@ export const PlayerSelectionPopup = () => {
             >
               <Box
                 sx={{
-                  width: '40px',
-                  height: '40px',
+                  width: '2.78vh',
+                  height: '2.78vh',
                   borderRadius: '50%',
                   background: colors.primary.alpha(0.2),
                   display: 'flex',
@@ -159,7 +159,7 @@ export const PlayerSelectionPopup = () => {
               >
                 <Person
                   sx={{
-                    fontSize: '24px',
+                    fontSize: '1.67vh',
                     color: colors.primary.main,
                   }}
                 />
@@ -167,7 +167,7 @@ export const PlayerSelectionPopup = () => {
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontSize: '16px',
+                    fontSize: '1.11vh',
                     fontWeight: 600,
                     fontFamily: 'Rubik, sans-serif',
                     color: colors.text.primary,
@@ -177,7 +177,7 @@ export const PlayerSelectionPopup = () => {
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: '12px',
+                    fontSize: '0.83vh',
                     fontFamily: 'Rubik, sans-serif',
                     color: colors.text.disabled,
                   }}

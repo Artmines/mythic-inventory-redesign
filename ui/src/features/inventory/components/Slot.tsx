@@ -486,14 +486,14 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
         onMouseLeave={() => setTooltipAnchor(null)}
         sx={{
         width: '100%',
-        height: '125px',
+        height: '8.68vh',
         background: isBroken
           ? 'linear-gradient(135deg, rgba(110, 22, 22, 0.8), rgba(110, 22, 22, 0.4))'
           : 'radial-gradient(50% 50% at 50% 50%, rgba(68, 68, 68, 0.05) 0%, rgba(182, 182, 182, 0.08) 100%)',
         border: `1px solid ${
           rarityRGB ? `rgba(${rarityRGB}, 0.5)` : colors.primary.alpha(0.2)
         }`,
-        borderRadius: '12px',
+        borderRadius: '0.63vw',
         position: 'relative',
         opacity: isBeingDragged ? 0.35 : 1,
         boxShadow: rarityRGB ? `0 4px 16px rgba(${rarityRGB}, 0.15)` : 'none',
@@ -516,7 +516,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
         <>
           <Box
             sx={{
-              height: '125px',
+              height: '8.68vh',
               width: '100%',
               backgroundImage: `url(${getItemImage(
                 metadata.CustomItemImage || item.Name
@@ -532,8 +532,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
               position: 'absolute',
               top: 0,
               right: 0,
-              padding: '0 5px',
-              fontSize: '14px',
+              padding: '0 0.26vw',
+              fontSize: '0.97vh',
               fontWeight: 'bold',
               fontFamily: 'Rubik, sans-serif',
               textShadow,
@@ -550,8 +550,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
               left: 0,
               width: '100%',
               textAlign: 'center',
-              padding: '2px 5px',
-              fontSize: '0.38vw',
+              padding: '0.14vh 0.26vw',
+              fontSize: '0.83vh',
               fontFamily: 'Rubik, sans-serif',
               fontWeight: 500,
               textTransform: 'uppercase',
@@ -560,8 +560,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
               textShadow,
               background: colors.secondary.dark,
               borderTop: `1px solid ${colors.primary.alpha(0.2)}`,
-              borderBottomLeftRadius: '12px',
-              borderBottomRightRadius: '12px',
+              borderBottomLeftRadius: '0.63vw',
+              borderBottomRightRadius: '0.63vw',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',
@@ -575,10 +575,10 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
             <Box
               sx={{
                 position: 'absolute',
-                bottom: '25px',
+                bottom: '1.74vh',
                 left: 0,
                 width: '100%',
-                height: '4px',
+                height: '0.28vh',
                 zIndex: 4,
               }}
             >
@@ -604,7 +604,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                fontSize: '16px',
+                fontSize: '1.11vh',
                 fontWeight: 'bold',
                 fontFamily: 'Rubik, sans-serif',
                 color: '#fff',
@@ -622,9 +622,9 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                padding: '0 5px',
-                width: '20px',
-                fontSize: '12px',
+                padding: '0 0.26vw',
+                width: '1.04vw',
+                fontSize: '0.83vh',
                 fontFamily: 'Rubik, sans-serif',
                 fontWeight: 600,
                 textShadow,
@@ -632,8 +632,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                 background: colors.secondary.dark,
                 borderRight: `1px solid ${colors.primary.alpha(0.3)}`,
                 borderBottom: `1px solid ${colors.primary.alpha(0.3)}`,
-                borderBottomRightRadius: '8px',
-                borderTopLeftRadius: '11px',
+                borderBottomRightRadius: '0.42vw',
+                borderTopLeftRadius: '0.57vw',
                 zIndex: 4,
               }}
             >
@@ -649,8 +649,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    padding: '0 5px',
-                    fontSize: '12px',
+                    padding: '0 0.26vw',
+                    fontSize: '0.83vh',
                     color: 'success.main',
                     zIndex: 4,
                   }}
@@ -663,13 +663,13 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    padding: '0 5px',
-                    fontSize: '12px',
+                    padding: '0 0.26vw',
+                    fontSize: '0.83vh',
                     color: 'success.main',
                     zIndex: 4,
                     '&::before': {
                       content: '"$"',
-                      marginRight: '2px',
+                      marginRight: '0.1vw',
                       color: 'text.primary',
                     },
                   }}
@@ -679,8 +679,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                     <Typography
                       component="span"
                       sx={{
-                        marginLeft: '5px',
-                        fontSize: '10px',
+                        marginLeft: '0.26vw',
+                        fontSize: '0.69vh',
                         color: 'text.secondary',
                         '&::before': {
                           content: '"($"',

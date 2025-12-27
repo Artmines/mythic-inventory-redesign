@@ -136,12 +136,12 @@ export const Crafting = () => {
               <Box
                 sx={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(7.29vw, 1fr))',
                   gap: '1vh',
                   overflowY: 'auto',
-                  paddingRight: '8px',
+                  paddingRight: '0.42vw',
                   '&::-webkit-scrollbar': {
-                    width: '4px',
+                    width: '0.21vw',
                   },
                   '&::-webkit-scrollbar-thumb': {
                     background: colors.primary.alpha(0.6),
@@ -171,20 +171,20 @@ export const Crafting = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         width: '100%',
-                        height: '140px',
+                        height: '9.72vh',
                         background: isSelected
                           ? `radial-gradient(50% 50% at 50% 50%, ${colors.primary.alpha(0.15)} 0%, ${colors.primary.alpha(0.25)} 100%)`
                           : `radial-gradient(50% 50% at 50% 50%, ${colors.grey.alpha(0.05)} 0%, rgba(182, 182, 182, 0.08) 100%)`,
                         border: isSelected
                           ? `1px solid ${colors.primary.alpha(0.6)}`
                           : `1px solid ${colors.primary.alpha(0.2)}`,
-                        borderRadius: '12px',
+                        borderRadius: '0.63vw',
                         boxShadow: isSelected
-                          ? `0 8px 24px ${colors.primary.alpha(0.3)}`
-                          : '0 4px 12px rgba(0, 0, 0, 0.3)',
-                        padding: '8px',
+                          ? `0 0.56vh 1.67vh ${colors.primary.alpha(0.3)}`
+                          : '0 0.28vh 0.83vh rgba(0, 0, 0, 0.3)',
+                        padding: '0.56vh 0.42vw',
                         flexDirection: 'column',
-                        gap: '8px',
+                        gap: '0.56vh',
                         overflow: 'hidden',
                         color: colors.text.primary,
                         textTransform: 'none',
@@ -201,8 +201,8 @@ export const Crafting = () => {
                         component="img"
                         src={getItemImage(recipe.result.name)}
                         sx={{
-                          height: '80px',
-                          width: '80px',
+                          height: '5.56vh',
+                          width: '4.17vw',
                           objectFit: 'contain',
                         }}
                       />

@@ -63,7 +63,7 @@ export const QuantityInput = ({ value, min = 1, max = 999, onChange, disabled = 
         gap: '0.5vh',
         background: colors.secondary.darkAlpha(0.5),
         border: `1px solid ${colors.primary.alpha(0.2)}`,
-        borderRadius: '8px',
+        borderRadius: '0.42vw',
         padding: '0.5vh 1vh',
       }}
     >
@@ -98,8 +98,8 @@ export const QuantityInput = ({ value, min = 1, max = 999, onChange, disabled = 
               fontFamily: 'Rubik, sans-serif',
               color: colors.text.primary,
               textAlign: 'center',
-              minWidth: '30px',
-              maxWidth: '50px',
+              minWidth: '1.56vw',
+              maxWidth: '2.6vw',
             },
           }}
           sx={{
@@ -116,7 +116,7 @@ export const QuantityInput = ({ value, min = 1, max = 999, onChange, disabled = 
             fontFamily: 'Rubik, sans-serif',
             fontSize: '0.9vw',
             fontWeight: 600,
-            minWidth: '30px',
+            minWidth: '1.56vw',
             textAlign: 'center',
             cursor: disabled ? 'default' : 'pointer',
             color: disabled ? colors.text.disabled : colors.text.primary,

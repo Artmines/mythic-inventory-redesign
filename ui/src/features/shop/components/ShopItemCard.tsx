@@ -77,16 +77,17 @@ const ShopItemCardComponent = ({ item }: ShopItemCardProps) => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: '300px',
+          width: '100%',
+          height: '20.83vh',
           background: `radial-gradient(circle at center, ${rarityColor}15 0%, transparent 70%)`,
           border: `1px solid ${rarityColor}40`,
-          borderRadius: '12px',
+          borderRadius: '0.63vw',
           overflow: 'hidden',
           transition: 'transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
           cursor: 'pointer',
           position: 'relative',
           willChange: 'transform',
-          containIntrinsicSize: '280px',
+          containIntrinsicSize: '19.44vh',
           contentVisibility: 'auto',
           '&:hover': {
             transform: 'scale(1.02)',
@@ -100,12 +101,12 @@ const ShopItemCardComponent = ({ item }: ShopItemCardProps) => {
           <Box
             sx={{
               position: 'absolute',
-              top: '8px',
-              right: '8px',
+              top: '0.56vh',
+              right: '0.42vw',
               background: `linear-gradient(135deg, ${colors.success.alpha(0.25)}, ${colors.success.alpha(0.15)})`,
               border: `1px solid ${colors.success.alpha(0.5)}`,
-              borderRadius: '8px',
-              padding: '4px 10px',
+              borderRadius: '0.42vw',
+              padding: '0.28vh 0.52vw',
               backdropFilter: 'blur(4px)',
               zIndex: 1,
             }}
@@ -130,16 +131,16 @@ const ShopItemCardComponent = ({ item }: ShopItemCardProps) => {
           <Box
             sx={{
               position: 'absolute',
-              top: '8px',
-              left: '8px',
+              top: '0.56vh',
+              left: '0.42vw',
               background: availableStock <= 0
                 ? `linear-gradient(135deg, ${colors.error.lightAlpha(0.25)}, ${colors.error.lightAlpha(0.15)})`
                 : `linear-gradient(135deg, ${colors.primary.alpha(0.25)}, ${colors.primary.alpha(0.15)})`,
               border: availableStock <= 0
                 ? `1px solid ${colors.error.lightAlpha(0.5)}`
                 : `1px solid ${colors.primary.alpha(0.5)}`,
-              borderRadius: '8px',
-              padding: '4px 10px',
+              borderRadius: '0.42vw',
+              padding: '0.28vh 0.52vw',
               backdropFilter: 'blur(4px)',
               zIndex: 1,
             }}
@@ -165,15 +166,16 @@ const ShopItemCardComponent = ({ item }: ShopItemCardProps) => {
             justifyContent: 'center',
             alignItems: 'center',
             padding: '4vh 1vh 1vh 1vh',
-            minHeight: '120px',
+            minHeight: '8.33vh',
+            flex: 1,
           }}
         >
           <Box
             component="img"
             src={getItemImage(item.Name)}
             sx={{
-              height: '110px',
-              width: '110px',
+              maxHeight: '7.64vh',
+              maxWidth: '100%',
               objectFit: 'contain',
               filter: `drop-shadow(0 0 8px ${rarityColor}40)`,
             }}
@@ -220,7 +222,7 @@ const ShopItemCardComponent = ({ item }: ShopItemCardProps) => {
             startIcon={<Add />}
             fullWidth
             sx={{
-              height: '46px',
+              height: '3.19vh',
               color: 'white',
               fontWeight: 600,
               fontFamily: 'Rubik, sans-serif',
@@ -231,7 +233,7 @@ const ShopItemCardComponent = ({ item }: ShopItemCardProps) => {
               border: itemData.price > 0 && availableStock > 0
                 ? `1px solid ${colors.primary.alpha(0.6)}`
                 : `1px solid ${colors.grey.alpha(0.5)}`,
-              borderRadius: '8px',
+              borderRadius: '0.42vw',
               textTransform: 'none',
               transition: 'all 0.2s ease',
               '&:hover': {
