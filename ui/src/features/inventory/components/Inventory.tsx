@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { useMemo } from 'react';
 import { useAppSelector } from '../../../shared/hooks';
 import { normalizeInventory, calcWeight } from '../../../shared/utils/inventory';
 import { Slot } from './Slot';
@@ -95,11 +96,22 @@ export const Inventory = () => {
     (state) => state.inventory
   );
 
-  const playerInv = normalizeInventory(player.inventory);
-  const secondaryInv = normalizeInventory(secondary.inventory);
+  // Memoize inventory normalization and weight calculations to prevent recalculation on every render
+  const { playerInv, secondaryInv, playerWeight, secondaryWeight } = useMemo(() => {
+    const playerInv = normalizeInventory(player.inventory);
+    const secondaryInv = normalizeInventory(secondary.inventory);
+    return {
+      playerInv,
+      secondaryInv,
+      playerWeight: calcWeight(playerInv, items),
+      secondaryWeight: calcWeight(secondaryInv, items),
+    };
+  }, [player.inventory, secondary.inventory, items]);
 
-  const playerWeight = calcWeight(playerInv, items);
-  const secondaryWeight = calcWeight(secondaryInv, items);
+  // Memoize slot number arrays to prevent recreating them on every render
+  const hotbarSlots = useMemo(() => Array.from({ length: 5 }, (_, i) => i + 1), []);
+  const playerSlots = useMemo(() => Array.from({ length: player.size - 5 }, (_, i) => i + 6), [player.size]);
+  const secondarySlots = useMemo(() => Array.from({ length: secondary.size }, (_, i) => i + 1), [secondary.size]);
 
   if (!itemsLoaded) {
     return (
@@ -190,8 +202,7 @@ export const Inventory = () => {
                   gap: '0.74vh',
                 }}
               >
-                {Array.from({ length: 5 }).map((_, index) => {
-                  const slotNumber = index + 1;
+                {hotbarSlots.map((slotNumber) => {
                   const item = playerInv.find((i) => i?.Slot === slotNumber) || null;
                   return (
                     <Slot
@@ -282,8 +293,7 @@ export const Inventory = () => {
                   },
                 }}
               >
-                {Array.from({ length: player.size - 5 }).map((_, index) => {
-                  const slotNumber = index + 6;
+                {playerSlots.map((slotNumber) => {
                   const item = playerInv.find((i) => i?.Slot === slotNumber) || null;
                   return (
                     <Slot
@@ -378,8 +388,7 @@ export const Inventory = () => {
                     },
                   }}
                 >
-                  {Array.from({ length: secondary.size }).map((_, index) => {
-                    const slotNumber = index + 1;
+                  {secondarySlots.map((slotNumber) => {
                     const item = secondaryInv.find((i) => i?.Slot === slotNumber) || null;
                     return (
                       <Slot

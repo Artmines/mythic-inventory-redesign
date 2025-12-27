@@ -1,5 +1,6 @@
-import { useState, useMemo, memo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { Box, LinearProgress, Typography } from '@mui/material';
+import { shallowEqual } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '../../../shared/hooks';
 import { inventoryActions } from '../inventorySlice';
 import { getItemImage } from '../../../shared/utils/inventory';
@@ -21,13 +22,14 @@ interface SlotProps {
 
 const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotProps) => {
   const dispatch = useAppDispatch();
-  // Only subscribe to the specific parts of state we need
-  const itemData = useAppSelector((state) => item ? state.inventory.items[item.Name] : null);
-  const hover = useAppSelector((state) => state.inventory.hover);
-  const hoverOrigin = useAppSelector((state) => state.inventory.hoverOrigin);
-  const player = useAppSelector((state) => state.inventory.player);
-  const secondary = useAppSelector((state) => state.inventory.secondary);
-  const items = useAppSelector((state) => state.inventory.items);
+  const { itemData, hover, hoverOrigin, player, secondary, items } = useAppSelector((state) => ({
+    itemData: item ? state.inventory.items[item.Name] : null,
+    hover: state.inventory.hover,
+    hoverOrigin: state.inventory.hoverOrigin,
+    player: state.inventory.player,
+    secondary: state.inventory.secondary,
+    items: state.inventory.items,
+  }), shallowEqual);
   const [tooltipAnchor, setTooltipAnchor] = useState<HTMLElement | null>(null);
   const [showSplit, setShowSplit] = useState(false);
   const [splitPosition, setSplitPosition] = useState({ x: 0, y: 0 });
@@ -53,7 +55,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
 
   const isBroken = durability !== null && durability <= 0;
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     if (disabled) return;
     if (!item || isEmpty) return;
@@ -221,9 +223,9 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
         invType,
       })
     );
-  };
+  }, [disabled, item, isEmpty, itemData, isBroken, invType, player, secondary, dispatch, owner, slot]);
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handleMouseUp = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     if (!hover || !hoverOrigin) return;
     if (e.button !== 0) return;
@@ -384,9 +386,9 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
     }
 
     dispatch(inventoryActions.clearHover());
-  };
+  }, [hover, hoverOrigin, slot, item, invType, player, secondary, items, dispatch]);
 
-  const handleContextMenu = (e: React.MouseEvent) => {
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     if (disabled) return;
     if (!item || isEmpty || hoverOrigin) return;
@@ -436,9 +438,9 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
         invType,
       })
     );
-  };
+  }, [item, slot, disabled, isEmpty, hoverOrigin, itemData, dispatch, owner, invType, setSplitPosition, setShowSplit]);
 
-  const handleSplitDrag = (amount: number) => {
+  const handleSplitDrag = useCallback((amount: number) => {
     if (!item) return;
 
     dispatch(
@@ -458,7 +460,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
       })
     );
     setShowSplit(false);
-  };
+  }, [item, slot, owner, invType, dispatch]);
 
   // Memoize durability color calculation
   const durabilityColor = useMemo(() => {

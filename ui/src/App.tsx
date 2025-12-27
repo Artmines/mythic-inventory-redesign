@@ -175,9 +175,12 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [dispatch]);
 
-  const hidden = useAppSelector((state) => state.app.hidden);
-  const mode = useAppSelector((state) => state.app.mode);
-  const crafting = useAppSelector((state) => state.crafting.crafting);
+  // Combine selectors to reduce subscription overhead
+  const { hidden, mode, crafting } = useAppSelector((state) => ({
+    hidden: state.app.hidden,
+    mode: state.app.mode,
+    crafting: state.crafting.crafting,
+  }));
 
   return (
     <ThemeProvider theme={theme}>

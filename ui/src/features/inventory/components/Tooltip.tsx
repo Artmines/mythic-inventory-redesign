@@ -1,4 +1,5 @@
 import { Box, Typography, Popover } from '@mui/material';
+import { useMemo } from 'react';
 import { useAppSelector } from '../../../shared/hooks';
 import { lua2json } from '../../../shared/utils/lua';
 import { formatThousands, getItemTypeLabel, getRarityLabel } from '../../../shared/utils/formatters';
@@ -25,26 +26,28 @@ const ignoredFields = [
 export const Tooltip = ({ item, anchorEl, onClose }: TooltipProps) => {
   const { items } = useAppSelector((state) => state.inventory);
 
-  if (!item || !anchorEl) return null;
+  const itemData = item ? items[item.Name] : null;
 
-  const itemData = items[item.Name];
-  if (!itemData) return null;
+  const metadata: ItemMetadata = useMemo(() => {
+    if (!item?.MetaData) return {};
+    return typeof item.MetaData === 'string' ? lua2json(item.MetaData) : item.MetaData;
+  }, [item?.MetaData]);
 
-  const metadata: ItemMetadata = item.MetaData
-    ? typeof item.MetaData === 'string'
-      ? lua2json(item.MetaData)
-      : item.MetaData
-    : {};
-
-  const calcDurability = (): number | null => {
-    if (!metadata.CreateDate || !itemData.durability) return null;
+  const durability = useMemo(() => {
+    if (!metadata.CreateDate || !itemData?.durability) return null;
     return Math.ceil(
       100 -
         ((Math.floor(Date.now() / 1000) - metadata.CreateDate) / itemData.durability) * 100
     );
-  };
+  }, [metadata.CreateDate, itemData?.durability]);
 
-  const durability = calcDurability();
+  const metadataEntries = useMemo(() =>
+    Object.entries(metadata).filter(([key]) => !ignoredFields.includes(key)),
+    [metadata]
+  );
+
+  if (!item || !anchorEl || !itemData) return null;
+
   const label = metadata.CustomItemLabel || itemData.label;
   const rarityLabel = getRarityLabel(itemData.rarity);
   const typeLabel = getItemTypeLabel(itemData.type);
@@ -367,7 +370,7 @@ export const Tooltip = ({ item, anchorEl, onClose }: TooltipProps) => {
         </Box>
 
         {/* Metadata Section */}
-        {metadata && Object.keys(metadata).length > 0 && (
+        {metadataEntries.length > 0 && (
           <Box
             sx={{
               paddingTop: '1vh',
@@ -387,7 +390,7 @@ export const Tooltip = ({ item, anchorEl, onClose }: TooltipProps) => {
               },
             }}
           >
-            {Object.entries(metadata).map(([key, value]) =>
+            {metadataEntries.map(([key, value]) =>
               renderMetadataField(key, value)
             )}
           </Box>

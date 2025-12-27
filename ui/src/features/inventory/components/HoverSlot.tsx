@@ -1,29 +1,36 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, memo } from 'react';
 import { Box, Typography } from '@mui/material';
+import { shallowEqual } from 'react-redux';
 import { useAppSelector } from '../../../shared/hooks';
 import { getItemImage } from '../../../shared/utils/inventory';
 import { lua2json } from '../../../shared/utils/lua';
 import { rarityColors, getRGBFromHex, colors, textShadow } from '../../../styles/theme';
 
-export const HoverSlot = () => {
-  const hover = useAppSelector((state) => state.inventory.hover);
-  const itemData = useAppSelector((state) =>
-    state.inventory.hover ? state.inventory.items[state.inventory.hover.Name] : null
-  );
+const HoverSlotComponent = () => {
+  const { hover, itemData } = useAppSelector((state) => {
+    const hover = state.inventory.hover;
+    return {
+      hover,
+      itemData: hover ? state.inventory.items[hover.Name] : null,
+    };
+  }, shallowEqual);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const rafRef = useRef<number | undefined>(undefined);
+  const posRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Cancel previous frame if it exists
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      // Update ref immediately without creating new objects
+      posRef.current.x = e.clientX;
+      posRef.current.y = e.clientY;
 
-      // Use requestAnimationFrame for smoother updates
-      rafRef.current = requestAnimationFrame(() => {
-        setMousePos({ x: e.clientX, y: e.clientY });
-      });
+      // Schedule only one update per frame
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(() => {
+          setMousePos({ x: posRef.current.x, y: posRef.current.y });
+          rafRef.current = undefined;
+        });
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -125,3 +132,6 @@ export const HoverSlot = () => {
     </Box>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders from parent
+export const HoverSlot = memo(HoverSlotComponent);

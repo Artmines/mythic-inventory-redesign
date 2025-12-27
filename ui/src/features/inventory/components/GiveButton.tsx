@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../shared/hooks';
 import { inventoryActions } from '../inventorySlice';
 import { nuiActions } from '../../../services/nui';
 import { colors } from '../../../styles/theme';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 export const GiveButton = () => {
   const dispatch = useAppDispatch();
@@ -13,27 +13,39 @@ export const GiveButton = () => {
   );
   const [hasNearbyPlayers, setHasNearbyPlayers] = useState(false);
 
-  // Check for nearby players periodically
+  // Check for nearby players periodically (optimized with longer interval)
   useEffect(() => {
+    let isMounted = true;
+
     const checkNearby = async () => {
       try {
         const result: any = await nuiActions.checkNearbyPlayers();
-        setHasNearbyPlayers(result?.count > 0);
+        if (isMounted) {
+          setHasNearbyPlayers(result?.count > 0);
+        }
       } catch {
-        setHasNearbyPlayers(false);
+        if (isMounted) {
+          setHasNearbyPlayers(false);
+        }
       }
     };
 
     // Check immediately
     checkNearby();
 
-    // Check every 2 seconds
-    const interval = setInterval(checkNearby, 2000);
+    // Increased to 5 seconds to reduce state update frequency
+    const interval = setInterval(() => {
+      if (isMounted) checkNearby();
+    }, 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
-  const isGiveable = (): boolean => {
+  // Memoize isGiveable calculation to prevent recalculating on every render
+  const isGiveable = useMemo(() => {
     if (!hasNearbyPlayers) return false;
     if (Object.keys(items).length === 0) return false;
     if (!hover) return false;
@@ -53,9 +65,9 @@ export const GiveButton = () => {
       hoverOrigin.invType === player.invType &&
       isDurable
     );
-  };
+  }, [hasNearbyPlayers, items, hover, hoverOrigin, secondary.shop, inUse, player.owner, player.invType]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (!hover || !hoverOrigin || hoverOrigin.invType !== player.invType) return;
 
     nuiActions.frontEndSound('SELECT');
@@ -74,10 +86,10 @@ export const GiveButton = () => {
 
     // Get nearby players - this will trigger the popup if there are any
     nuiActions.getNearbyPlayers();
-  };
+  }, [hover, hoverOrigin, player.invType, dispatch]);
 
   return (
-    <Fade in={isGiveable()} timeout={200}>
+    <Fade in={isGiveable} timeout={200}>
       <Box
         onMouseUp={handleMouseUp}
         sx={{

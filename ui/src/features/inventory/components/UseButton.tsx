@@ -1,4 +1,5 @@
 import { Box, Fade, Typography } from '@mui/material';
+import { useMemo, useCallback } from 'react';
 import { Fingerprint } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../../shared/hooks';
 import { inventoryActions } from '../inventorySlice';
@@ -11,7 +12,8 @@ export const UseButton = () => {
     (state) => state.inventory
   );
 
-  const isUsable = (): boolean => {
+  // Memoize isUsable calculation to prevent recalculating on every render
+  const isUsable = useMemo(() => {
     if (Object.keys(items).length === 0) return false;
     if (!hover) return false;
     if (!hoverOrigin) return false;
@@ -30,9 +32,9 @@ export const UseButton = () => {
       itemData.isUsable &&
       isDurable
     );
-  };
+  }, [items, hover, hoverOrigin, secondary.shop, inUse, player.owner]);
 
-  const handleUseItem = () => {
+  const handleUseItem = useCallback(() => {
     if (!hover || !hoverOrigin || hoverOrigin.invType !== player.invType) return;
 
     nuiActions.frontEndSound('SELECT');
@@ -51,10 +53,10 @@ export const UseButton = () => {
     );
 
     dispatch(inventoryActions.clearHover());
-  };
+  }, [hover, hoverOrigin, player.invType, dispatch]);
 
   return (
-    <Fade in={isUsable()} timeout={200}>
+    <Fade in={isUsable} timeout={200}>
       <Box
         onMouseUp={handleUseItem}
         sx={{
