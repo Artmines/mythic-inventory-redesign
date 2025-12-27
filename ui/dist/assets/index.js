@@ -2488,7 +2488,7 @@ function requireReactDomClient_production() {
     return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
   }
   var objectIs = "function" === typeof Object.is ? Object.is : is2;
-  function shallowEqual(objA, objB) {
+  function shallowEqual2(objA, objB) {
     if (objectIs(objA, objB)) return true;
     if ("object" !== typeof objA || null === objA || "object" !== typeof objB || null === objB)
       return false;
@@ -2557,7 +2557,7 @@ function requireReactDomClient_production() {
       anchorOffset: doc.anchorOffset,
       focusNode: doc.focusNode,
       focusOffset: doc.focusOffset
-    }), lastSelection && shallowEqual(lastSelection, doc) || (lastSelection = doc, doc = accumulateTwoPhaseListeners(activeElementInst, "onSelect"), 0 < doc.length && (nativeEvent = new SyntheticEvent(
+    }), lastSelection && shallowEqual2(lastSelection, doc) || (lastSelection = doc, doc = accumulateTwoPhaseListeners(activeElementInst, "onSelect"), 0 < doc.length && (nativeEvent = new SyntheticEvent(
       "onSelect",
       "select",
       null,
@@ -5256,7 +5256,7 @@ function requireReactDomClient_production() {
   };
   function checkShouldComponentUpdate(workInProgress2, ctor, oldProps, newProps, oldState, newState, nextContext) {
     workInProgress2 = workInProgress2.stateNode;
-    return "function" === typeof workInProgress2.shouldComponentUpdate ? workInProgress2.shouldComponentUpdate(newProps, newState, nextContext) : ctor.prototype && ctor.prototype.isPureReactComponent ? !shallowEqual(oldProps, newProps) || !shallowEqual(oldState, newState) : true;
+    return "function" === typeof workInProgress2.shouldComponentUpdate ? workInProgress2.shouldComponentUpdate(newProps, newState, nextContext) : ctor.prototype && ctor.prototype.isPureReactComponent ? !shallowEqual2(oldProps, newProps) || !shallowEqual2(oldState, newState) : true;
   }
   function callComponentWillReceiveProps(workInProgress2, instance, newProps, nextContext) {
     workInProgress2 = instance.state;
@@ -5469,7 +5469,7 @@ function requireReactDomClient_production() {
     if (!checkScheduledUpdateOrContext(current2, renderLanes2)) {
       var prevProps = type.memoizedProps;
       Component = Component.compare;
-      Component = null !== Component ? Component : shallowEqual;
+      Component = null !== Component ? Component : shallowEqual2;
       if (Component(prevProps, nextProps) && current2.ref === workInProgress2.ref)
         return bailoutOnAlreadyFinishedWork(current2, workInProgress2, renderLanes2);
     }
@@ -5482,7 +5482,7 @@ function requireReactDomClient_production() {
   function updateSimpleMemoComponent(current2, workInProgress2, Component, nextProps, renderLanes2) {
     if (null !== current2) {
       var prevProps = current2.memoizedProps;
-      if (shallowEqual(prevProps, nextProps) && current2.ref === workInProgress2.ref)
+      if (shallowEqual2(prevProps, nextProps) && current2.ref === workInProgress2.ref)
         if (didReceiveUpdate = false, workInProgress2.pendingProps = nextProps = prevProps, checkScheduledUpdateOrContext(current2, renderLanes2))
           0 !== (current2.flags & 131072) && (didReceiveUpdate = true);
         else
@@ -12715,6 +12715,28 @@ var isRunningInReactNative = () => typeof navigator !== "undefined" && navigator
 var isReactNative = /* @__PURE__ */ isRunningInReactNative();
 var getUseIsomorphicLayoutEffect = () => isDOM || isReactNative ? reactExports.useLayoutEffect : reactExports.useEffect;
 var useIsomorphicLayoutEffect = /* @__PURE__ */ getUseIsomorphicLayoutEffect();
+function is$1(x, y) {
+  if (x === y) {
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    return x !== x && y !== y;
+  }
+}
+function shallowEqual(objA, objB) {
+  if (is$1(objA, objB)) return true;
+  if (typeof objA !== "object" || objA === null || typeof objB !== "object" || objB === null) {
+    return false;
+  }
+  const keysA = Object.keys(objA);
+  const keysB = Object.keys(objB);
+  if (keysA.length !== keysB.length) return false;
+  for (let i = 0; i < keysA.length; i++) {
+    if (!Object.prototype.hasOwnProperty.call(objB, keysA[i]) || !is$1(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+  return true;
+}
 var ContextKey = /* @__PURE__ */ Symbol.for(`react-redux-context`);
 var gT = typeof globalThis !== "undefined" ? globalThis : (
   /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
@@ -32018,17 +32040,22 @@ const ignoredFields = [
 ];
 const Tooltip$1 = ({ item, anchorEl, onClose }) => {
   const { items } = useAppSelector((state) => state.inventory);
-  if (!item || !anchorEl) return null;
-  const itemData = items[item.Name];
-  if (!itemData) return null;
-  const metadata = item.MetaData ? typeof item.MetaData === "string" ? lua2json(item.MetaData) : item.MetaData : {};
-  const calcDurability = () => {
-    if (!metadata.CreateDate || !itemData.durability) return null;
+  const itemData = item ? items[item.Name] : null;
+  const metadata = reactExports.useMemo(() => {
+    if (!item?.MetaData) return {};
+    return typeof item.MetaData === "string" ? lua2json(item.MetaData) : item.MetaData;
+  }, [item?.MetaData]);
+  const durability = reactExports.useMemo(() => {
+    if (!metadata.CreateDate || !itemData?.durability) return null;
     return Math.ceil(
       100 - (Math.floor(Date.now() / 1e3) - metadata.CreateDate) / itemData.durability * 100
     );
-  };
-  const durability = calcDurability();
+  }, [metadata.CreateDate, itemData?.durability]);
+  const metadataEntries = reactExports.useMemo(
+    () => Object.entries(metadata).filter(([key]) => !ignoredFields.includes(key)),
+    [metadata]
+  );
+  if (!item || !anchorEl || !itemData) return null;
   const label = metadata.CustomItemLabel || itemData.label;
   const rarityLabel = getRarityLabel$1(itemData.rarity);
   const typeLabel = getItemTypeLabel(itemData.type);
@@ -32337,7 +32364,7 @@ const Tooltip$1 = ({ item, anchorEl, onClose }) => {
             )
           ] })
         ] }),
-        metadata && Object.keys(metadata).length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        metadataEntries.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
           Box,
           {
             sx: {
@@ -32357,7 +32384,7 @@ const Tooltip$1 = ({ item, anchorEl, onClose }) => {
                 margin: 0
               }
             },
-            children: Object.entries(metadata).map(
+            children: metadataEntries.map(
               ([key, value]) => renderMetadataField(key, value)
             )
           }
@@ -32467,12 +32494,14 @@ const SplitDialog = ({
 };
 const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
   const dispatch = useAppDispatch();
-  const itemData = useAppSelector((state) => item ? state.inventory.items[item.Name] : null);
-  const hover = useAppSelector((state) => state.inventory.hover);
-  const hoverOrigin = useAppSelector((state) => state.inventory.hoverOrigin);
-  const player = useAppSelector((state) => state.inventory.player);
-  const secondary = useAppSelector((state) => state.inventory.secondary);
-  const items = useAppSelector((state) => state.inventory.items);
+  const { itemData, hover, hoverOrigin, player, secondary, items } = useAppSelector((state) => ({
+    itemData: item ? state.inventory.items[item.Name] : null,
+    hover: state.inventory.hover,
+    hoverOrigin: state.inventory.hoverOrigin,
+    player: state.inventory.player,
+    secondary: state.inventory.secondary,
+    items: state.inventory.items
+  }), shallowEqual);
   const [tooltipAnchor, setTooltipAnchor] = reactExports.useState(null);
   const [showSplit, setShowSplit] = reactExports.useState(false);
   const [splitPosition, setSplitPosition] = reactExports.useState({ x: 0, y: 0 });
@@ -32488,7 +32517,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
     );
   }, [item?.CreateDate, itemData?.durability]);
   const isBroken = durability !== null && durability <= 0;
-  const handleMouseDown = (e) => {
+  const handleMouseDown = reactExports.useCallback((e) => {
     e.preventDefault();
     if (disabled) return;
     if (!item || isEmpty2) return;
@@ -32626,8 +32655,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
         invType
       })
     );
-  };
-  const handleMouseUp = (e) => {
+  }, [disabled, item, isEmpty2, itemData, isBroken, invType, player, secondary, dispatch, owner, slot]);
+  const handleMouseUp = reactExports.useCallback((e) => {
     e.preventDefault();
     if (!hover || !hoverOrigin) return;
     if (e.button !== 0) return;
@@ -32759,8 +32788,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
       }
     }
     dispatch(inventoryActions.clearHover());
-  };
-  const handleContextMenu = (e) => {
+  }, [hover, hoverOrigin, slot, item, invType, player, secondary, items, dispatch]);
+  const handleContextMenu = reactExports.useCallback((e) => {
     e.preventDefault();
     if (disabled) return;
     if (!item || isEmpty2 || hoverOrigin) return;
@@ -32804,8 +32833,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
         invType
       })
     );
-  };
-  const handleSplitDrag = (amount) => {
+  }, [item, slot, disabled, isEmpty2, hoverOrigin, itemData, dispatch, owner, invType, setSplitPosition, setShowSplit]);
+  const handleSplitDrag = reactExports.useCallback((amount) => {
     if (!item) return;
     dispatch(
       inventoryActions.setHover({
@@ -32824,7 +32853,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
       })
     );
     setShowSplit(false);
-  };
+  }, [item, slot, owner, invType, dispatch]);
   const durabilityColor = reactExports.useMemo(() => {
     if (!durability) return "#8685EF";
     if (durability >= 75) return "#52984a";
@@ -33109,7 +33138,7 @@ const UseButton = () => {
   const { hover, hoverOrigin, items, inUse, player, secondary } = useAppSelector(
     (state) => state.inventory
   );
-  const isUsable = () => {
+  const isUsable = reactExports.useMemo(() => {
     if (Object.keys(items).length === 0) return false;
     if (!hover) return false;
     if (!hoverOrigin) return false;
@@ -33118,8 +33147,8 @@ const UseButton = () => {
     if (!itemData) return false;
     const isDurable = !itemData.durability || !!hover.CreateDate && hover.CreateDate + itemData.durability > Date.now() / 1e3;
     return !inUse && hoverOrigin.owner === player.owner && itemData.isUsable && isDurable;
-  };
-  const handleUseItem = () => {
+  }, [items, hover, hoverOrigin, secondary.shop, inUse, player.owner]);
+  const handleUseItem = reactExports.useCallback(() => {
     if (!hover || !hoverOrigin || hoverOrigin.invType !== player.invType) return;
     nuiActions.frontEndSound("SELECT");
     nuiActions.useItem({
@@ -33134,8 +33163,8 @@ const UseButton = () => {
       })
     );
     dispatch(inventoryActions.clearHover());
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Fade, { in: isUsable(), timeout: 200, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  }, [hover, hoverOrigin, player.invType, dispatch]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Fade, { in: isUsable, timeout: 200, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     Box,
     {
       onMouseUp: handleUseItem,
@@ -33207,19 +33236,29 @@ const GiveButton = () => {
   );
   const [hasNearbyPlayers, setHasNearbyPlayers] = reactExports.useState(false);
   reactExports.useEffect(() => {
+    let isMounted = true;
     const checkNearby = async () => {
       try {
         const result = await nuiActions.checkNearbyPlayers();
-        setHasNearbyPlayers(result?.count > 0);
+        if (isMounted) {
+          setHasNearbyPlayers(result?.count > 0);
+        }
       } catch {
-        setHasNearbyPlayers(false);
+        if (isMounted) {
+          setHasNearbyPlayers(false);
+        }
       }
     };
     checkNearby();
-    const interval = setInterval(checkNearby, 2e3);
-    return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      if (isMounted) checkNearby();
+    }, 5e3);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
-  const isGiveable = () => {
+  const isGiveable = reactExports.useMemo(() => {
     if (!hasNearbyPlayers) return false;
     if (Object.keys(items).length === 0) return false;
     if (!hover) return false;
@@ -33229,8 +33268,8 @@ const GiveButton = () => {
     if (!itemData) return false;
     const isDurable = !itemData.durability || !!hover.CreateDate && hover.CreateDate + itemData.durability > Date.now() / 1e3;
     return !inUse && hoverOrigin.owner === player.owner && hoverOrigin.invType === player.invType && isDurable;
-  };
-  const handleMouseUp = () => {
+  }, [hasNearbyPlayers, items, hover, hoverOrigin, secondary.shop, inUse, player.owner, player.invType]);
+  const handleMouseUp = reactExports.useCallback(() => {
     if (!hover || !hoverOrigin || hoverOrigin.invType !== player.invType) return;
     nuiActions.frontEndSound("SELECT");
     dispatch(inventoryActions.setPendingGiveItem({
@@ -33242,8 +33281,8 @@ const GiveButton = () => {
     }));
     dispatch(inventoryActions.clearHover());
     nuiActions.getNearbyPlayers();
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Fade, { in: isGiveable(), timeout: 200, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  }, [hover, hoverOrigin, player.invType, dispatch]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Fade, { in: isGiveable, timeout: 200, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     Box,
     {
       onMouseUp: handleMouseUp,
@@ -34526,10 +34565,19 @@ const Inventory = () => {
   const { player, secondary, showSecondary, items, itemsLoaded } = useAppSelector(
     (state) => state.inventory
   );
-  const playerInv = normalizeInventory(player.inventory);
-  const secondaryInv = normalizeInventory(secondary.inventory);
-  const playerWeight = calcWeight(playerInv, items);
-  const secondaryWeight = calcWeight(secondaryInv, items);
+  const { playerInv, secondaryInv, playerWeight, secondaryWeight } = reactExports.useMemo(() => {
+    const playerInv2 = normalizeInventory(player.inventory);
+    const secondaryInv2 = normalizeInventory(secondary.inventory);
+    return {
+      playerInv: playerInv2,
+      secondaryInv: secondaryInv2,
+      playerWeight: calcWeight(playerInv2, items),
+      secondaryWeight: calcWeight(secondaryInv2, items)
+    };
+  }, [player.inventory, secondary.inventory, items]);
+  const hotbarSlots = reactExports.useMemo(() => Array.from({ length: 5 }, (_, i) => i + 1), []);
+  const playerSlots = reactExports.useMemo(() => Array.from({ length: player.size - 5 }, (_, i) => i + 6), [player.size]);
+  const secondarySlots = reactExports.useMemo(() => Array.from({ length: secondary.size }, (_, i) => i + 1), [secondary.size]);
   if (!itemsLoaded) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Box,
@@ -34612,8 +34660,7 @@ const Inventory = () => {
                             gridTemplateColumns: "repeat(5, 8.68vh)",
                             gap: "0.74vh"
                           },
-                          children: Array.from({ length: 5 }).map((_, index) => {
-                            const slotNumber = index + 1;
+                          children: hotbarSlots.map((slotNumber) => {
                             const item = playerInv.find((i) => i?.Slot === slotNumber) || null;
                             return /* @__PURE__ */ jsxRuntimeExports.jsx(
                               Slot,
@@ -34696,8 +34743,7 @@ const Inventory = () => {
                               borderRadius: "0.375rem"
                             }
                           },
-                          children: Array.from({ length: player.size - 5 }).map((_, index) => {
-                            const slotNumber = index + 6;
+                          children: playerSlots.map((slotNumber) => {
                             const item = playerInv.find((i) => i?.Slot === slotNumber) || null;
                             return /* @__PURE__ */ jsxRuntimeExports.jsx(
                               Slot,
@@ -34781,8 +34827,7 @@ const Inventory = () => {
                             borderRadius: "0.375rem"
                           }
                         },
-                        children: Array.from({ length: secondary.size }).map((_, index) => {
-                          const slotNumber = index + 1;
+                        children: secondarySlots.map((slotNumber) => {
                           const item = secondaryInv.find((i) => i?.Slot === slotNumber) || null;
                           return /* @__PURE__ */ jsxRuntimeExports.jsx(
                             Slot,
@@ -34809,21 +34854,27 @@ const Inventory = () => {
     )
   ] });
 };
-const HoverSlot = () => {
-  const hover = useAppSelector((state) => state.inventory.hover);
-  const itemData = useAppSelector(
-    (state) => state.inventory.hover ? state.inventory.items[state.inventory.hover.Name] : null
-  );
+const HoverSlotComponent = () => {
+  const { hover, itemData } = useAppSelector((state) => {
+    const hover2 = state.inventory.hover;
+    return {
+      hover: hover2,
+      itemData: hover2 ? state.inventory.items[hover2.Name] : null
+    };
+  }, shallowEqual);
   const [mousePos, setMousePos] = reactExports.useState({ x: 0, y: 0 });
   const rafRef = reactExports.useRef(void 0);
+  const posRef = reactExports.useRef({ x: 0, y: 0 });
   reactExports.useEffect(() => {
     const handleMouseMove = (e) => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
+      posRef.current.x = e.clientX;
+      posRef.current.y = e.clientY;
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(() => {
+          setMousePos({ x: posRef.current.x, y: posRef.current.y });
+          rafRef.current = void 0;
+        });
       }
-      rafRef.current = requestAnimationFrame(() => {
-        setMousePos({ x: e.clientX, y: e.clientY });
-      });
     };
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => {
@@ -34922,6 +34973,7 @@ const HoverSlot = () => {
     }
   );
 };
+const HoverSlot = reactExports.memo(HoverSlotComponent);
 const Hotbar = () => {
   const dispatch = useAppDispatch();
   const { showHotbar, mode, hidden } = useAppSelector((state) => state.app);
@@ -36702,9 +36754,11 @@ function App() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [dispatch]);
-  const hidden = useAppSelector((state) => state.app.hidden);
-  const mode = useAppSelector((state) => state.app.mode);
-  const crafting = useAppSelector((state) => state.crafting.crafting);
+  const { hidden, mode, crafting } = useAppSelector((state) => ({
+    hidden: state.app.hidden,
+    mode: state.app.mode,
+    crafting: state.crafting.crafting
+  }));
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(ThemeProvider, { theme, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(CssBaseline, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
