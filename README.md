@@ -64,15 +64,12 @@
 ---
 
 ## 📸 Screenshots
-### Main Inventory
-<img width="1775" height="1000" alt="image" src="https://github.com/user-attachments/assets/933534c5-cd90-4657-8c79-8f243f053993" />
 
-### Crafting
-<img width="1601" height="1168" alt="image" src="https://github.com/user-attachments/assets/001259ad-2306-4ffa-8e3a-475e78168d35" />
+![Inventory Main](image.png)
 
-### Shop
-<img width="2429" height="1075" alt="image" src="https://github.com/user-attachments/assets/9ae33d47-2b5b-4e60-b2d9-978f68f6d373" />
+![Crafting System](image-1.png)
 
+![Shop System](image-2.png)
 
 ---
 

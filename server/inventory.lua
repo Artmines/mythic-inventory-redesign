@@ -1132,6 +1132,85 @@ function RegisterCallbacks()
 		end
 	end)
 
+	Callbacks:RegisterServerCallback("Inventory:GiveItem", function(source, data, cb)
+		local player = Fetch:Source(source)
+		local target = Fetch:Source(data.targetServerId)
+
+		if not player or not target then
+			Execute:Client(source, "Notification", "Error", "Invalid player")
+			cb(false)
+			return
+		end
+
+		local char = player:GetData("Character")
+		local tarChar = target:GetData("Character")
+
+		if not char or not tarChar then
+			Execute:Client(source, "Notification", "Error", "Invalid character")
+			cb(false)
+			return
+		end
+
+		-- Validate proximity (3.0 units)
+		local sourceCoords = GetEntityCoords(GetPlayerPed(source))
+		local targetCoords = GetEntityCoords(GetPlayerPed(data.targetServerId))
+		local distance = #(sourceCoords - targetCoords)
+
+		if distance > 3.0 then
+			Execute:Client(source, "Notification", "Error", "Player too far away")
+			cb(false)
+			return
+		end
+
+		-- Validate source slot
+		local sourceSlot = Inventory:GetSlot(data.owner, data.slot, data.invType)
+		if not sourceSlot then
+			Execute:Client(source, "Notification", "Error", "Invalid item")
+			cb(false)
+			return
+		end
+
+		-- Find empty slot in target inventory
+		local targetSlots = Inventory:GetFreeSlotNumbers(tarChar:GetData("SID"), 1, false, false)
+		if #targetSlots == 0 or targetSlots[1] > 25 then
+			Execute:Client(source, "Notification", "Error", "Target inventory is full")
+			Execute:Client(data.targetServerId, "Notification", "Error", "Your inventory is full")
+			cb(false)
+			return
+		end
+
+		local targetSlot = targetSlots[1]
+
+		-- Perform the transfer using DoMove logic
+		local moveData = {
+			ownerFrom = char:GetData("SID"),
+			ownerTo = tarChar:GetData("SID"),
+			slotFrom = data.slot,
+			slotTo = targetSlot,
+			name = data.itemName,
+			countFrom = sourceSlot.Count or 1,
+			countTo = data.count or sourceSlot.Count or 1,
+			invTypeFrom = 1,
+			invTypeTo = 1,
+		}
+
+		DoMove(source, moveData, function(success)
+			if success then
+				local itemLabel = (itemsDatabase[data.itemName] and itemsDatabase[data.itemName].label) or data.itemName
+				Execute:Client(source, "Notification", "Success", string.format("Gave %s to player", itemLabel))
+				Execute:Client(data.targetServerId, "Notification", "Success", string.format("Received %s from player", itemLabel))
+
+				LogEvent(source, 'Info', string.format('SID: %s gave x%s %s to SID: %s',
+					char:GetData("SID"),
+					data.count or sourceSlot.Count or 1,
+					data.itemName,
+					tarChar:GetData("SID")
+				))
+			end
+			cb(success)
+		end)
+	end)
+
 	Callbacks:RegisterServerCallback("Inventory:UseSlot", function(source, data, cb)
 		if data and data.slot then
 			local player = Fetch:Source(source)

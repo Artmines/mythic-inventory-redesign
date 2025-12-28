@@ -1,7 +1,7 @@
 _entityTypes = {
 	{
 		id = 1,
-		slots = 30,
+		slots = 25,
 		capacity = 200,
 		name = 'Personal Storage',
 	},

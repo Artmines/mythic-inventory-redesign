@@ -940,6 +940,108 @@ RegisterNUICallback("UseItem", function(data, cb)
 	}, function(success) end)
 end)
 
+RegisterNUICallback("CheckNearbyPlayers", function(data, cb)
+	local myPed = PlayerPedId()
+	local myCoords = GetEntityCoords(myPed)
+	local players = GetActivePlayers()
+	local count = 0
+
+	for _, playerId in ipairs(players) do
+		local targetPed = GetPlayerPed(playerId)
+		if targetPed ~= myPed then
+			local targetCoords = GetEntityCoords(targetPed)
+			local distance = #(myCoords - targetCoords)
+
+			if distance <= 3.0 then
+				count = count + 1
+			end
+		end
+	end
+
+	cb({ count = count })
+end)
+
+RegisterNUICallback("GetNearbyPlayers", function(data, cb)
+	local nearbyPlayers = {}
+	local myPed = PlayerPedId()
+	local myCoords = GetEntityCoords(myPed)
+	local players = GetActivePlayers()
+
+	for _, playerId in ipairs(players) do
+		local targetPed = GetPlayerPed(playerId)
+		if targetPed ~= myPed then
+			local targetCoords = GetEntityCoords(targetPed)
+			local distance = #(myCoords - targetCoords)
+
+			if distance <= 3.0 then
+				local serverId = GetPlayerServerId(playerId)
+				local playerName = GetPlayerName(playerId)
+
+				table.insert(nearbyPlayers, {
+					serverId = serverId,
+					name = playerName,
+					distance = distance,
+				})
+			end
+		end
+	end
+
+	-- Sort by distance
+	table.sort(nearbyPlayers, function(a, b)
+		return a.distance < b.distance
+	end)
+
+	-- Return via callback for immediate use
+	cb(nearbyPlayers)
+
+	-- Send the list to the UI
+	SendNUIMessage({
+		type = "NEARBY_PLAYERS_LIST",
+		payload = nearbyPlayers,
+	})
+end)
+
+RegisterNUICallback("GiveItem", function(data, cb)
+	cb("OK")
+	if LocalPlayer.state.doingAction then
+		return
+	end
+
+	Callbacks:ServerCallback("Inventory:GiveItem", {
+		targetServerId = data.targetServerId,
+		slot = data.slot,
+		owner = data.owner,
+		invType = data.invType,
+		itemName = data.itemName,
+		count = data.count,
+	}, function(success)
+		if not success then
+			Notification:Error("Failed to give item")
+		end
+	end)
+end)
+
+RegisterNUICallback("PurchaseCart", function(data, cb)
+	cb("OK")
+	Callbacks:ServerCallback("Shop:Server:Purchase", {
+		shopOwner = data.shopOwner,
+		shopInvType = data.shopInvType,
+		items = data.items,
+		paymentMethod = data.paymentMethod,
+		totalPrice = data.totalPrice,
+	}, function(success)
+		if success then
+			SendNUIMessage({
+				type = "SHOP_PURCHASE_SUCCESS",
+			})
+		else
+			SendNUIMessage({
+				type = "SHOP_PURCHASE_FAILED",
+			})
+		end
+	end)
+end)
+
 RegisterNetEvent("Inventory:CloseUI", function()
 	startCd()
 	Inventory.Close:All()

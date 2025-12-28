@@ -8,7 +8,7 @@ client_script "@mythic-base/components/cl_error.lua"
 client_script "@mythic-pwnzor/client/check.lua"
 server_script "@oxmysql/lib/MySQL.lua"
 
-description 'ARP Inventory'
+description 'Mythic-Inventory'
 name 'ARP: mythic-inventory'
 author 'Cool People Team (Mainly Alzar)'
 version 'v1.0.0'
