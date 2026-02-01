@@ -10,6 +10,7 @@ interface TooltipProps {
   item: InventoryItem | null;
   anchorEl: HTMLElement | null;
   onClose: () => void;
+  isShop?: boolean;
 }
 
 const ignoredFields = [
@@ -23,7 +24,7 @@ const ignoredFields = [
   'Items',
 ];
 
-export const Tooltip = ({ item, anchorEl, onClose }: TooltipProps) => {
+export const Tooltip = ({ item, anchorEl, onClose, isShop = false }: TooltipProps) => {
   const { items } = useAppSelector((state) => state.inventory);
 
   const itemData = item ? items[item.Name] : null;
@@ -127,13 +128,40 @@ export const Tooltip = ({ item, anchorEl, onClose }: TooltipProps) => {
       <Box sx={{
         minWidth: 250,
         maxWidth: 350,
-        background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(10, 10, 10, 0.95))',
+        background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(15, 15, 15, 0.98) 50%, rgba(10, 10, 10, 0.98) 100%)',
         border: `2px solid ${rarityColors[itemData.rarity]}`,
-        borderRadius: '8px',
+        borderRadius: '12px',
         padding: '1.5vh',
         display: 'flex',
         flexDirection: 'column',
         gap: '1vh',
+        boxShadow: `0 8px 32px rgba(0, 0, 0, 0.9), 0 0 40px ${rarityColors[itemData.rarity]}40, inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '2px',
+          background: `linear-gradient(90deg, transparent, ${rarityColors[itemData.rarity]}, transparent)`,
+          animation: 'borderShine 3s ease-in-out infinite',
+          zIndex: 10,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: `linear-gradient(90deg, transparent, ${rarityColors[itemData.rarity]}20, transparent)`,
+          transform: 'translateX(-100%)',
+          animation: 'shimmer 6s infinite',
+          pointerEvents: 'none',
+          zIndex: 1,
+        },
       }}>
         {/* Header with item name, count, and price */}
         <Box sx={{
@@ -171,7 +199,7 @@ export const Tooltip = ({ item, anchorEl, onClose }: TooltipProps) => {
               </Typography>
             )}
           </Box>
-          {itemData.price > 0 && (
+          {isShop && itemData.price > 0 && (
             <Typography
               sx={{
                 fontSize: '0.75vw',

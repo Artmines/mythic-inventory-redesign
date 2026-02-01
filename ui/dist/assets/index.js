@@ -31775,9 +31775,9 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#85efe6ff",
-      light: "#a7e9f5ff",
-      dark: "#54aac4ff"
+      main: "#9f5cd6",
+      light: "#b580e0",
+      dark: "#7a3bb3"
     },
     secondary: {
       main: "#1a1a1a",
@@ -31839,15 +31839,15 @@ const theme = createTheme({
             width: "4px"
           },
           "&::-webkit-scrollbar-thumb": {
-            background: "rgba(133, 235, 239, 0.6)",
+            background: "rgba(159, 92, 214, 0.6)",
             transition: "background ease-in 0.15s",
             borderRadius: "0.375rem",
             "&:hover": {
-              background: "rgba(133, 239, 239, 0.9)"
+              background: "rgba(159, 92, 214, 0.9)"
             }
           },
           "&::-webkit-scrollbar-track": {
-            background: "rgba(133, 214, 239, 0.1)"
+            background: "rgba(159, 92, 214, 0.1)"
           }
         }
       }
@@ -31863,7 +31863,7 @@ const rarityColors = {
 };
 const getRGBFromHex = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return "134, 133, 239";
+  if (!result) return "159, 92, 214";
   return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
 };
 const textShadow = "0px 1px 1px rgba(0, 0, 0, 0.25)";
@@ -31876,8 +31876,10 @@ const alpha = (color2, opacity) => {
 };
 const colors = {
   primary: {
-    main: "#85efe6ff",
-    alpha: (opacity) => alpha("#85efe6ff", opacity)
+    main: "#9f5cd6",
+    light: "#b580e0",
+    dark: "#7a3bb3",
+    alpha: (opacity) => alpha("#9f5cd6", opacity)
   },
   success: {
     main: "#9CE60D",
@@ -32038,7 +32040,7 @@ const ignoredFields = [
   "CustomItemImage",
   "Items"
 ];
-const Tooltip$1 = ({ item, anchorEl, onClose }) => {
+const Tooltip$1 = ({ item, anchorEl, onClose, isShop = false }) => {
   const { items } = useAppSelector((state) => state.inventory);
   const itemData = item ? items[item.Name] : null;
   const metadata = reactExports.useMemo(() => {
@@ -32131,13 +32133,40 @@ const Tooltip$1 = ({ item, anchorEl, onClose }) => {
       children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Box, { sx: {
         minWidth: 250,
         maxWidth: 350,
-        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(10, 10, 10, 0.95))",
+        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(15, 15, 15, 0.98) 50%, rgba(10, 10, 10, 0.98) 100%)",
         border: `2px solid ${rarityColors[itemData.rarity]}`,
-        borderRadius: "8px",
+        borderRadius: "12px",
         padding: "1.5vh",
         display: "flex",
         flexDirection: "column",
-        gap: "1vh"
+        gap: "1vh",
+        boxShadow: `0 8px 32px rgba(0, 0, 0, 0.9), 0 0 40px ${rarityColors[itemData.rarity]}40, inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+        position: "relative",
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${rarityColors[itemData.rarity]}, transparent)`,
+          animation: "borderShine 3s ease-in-out infinite",
+          zIndex: 10
+        },
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: `linear-gradient(90deg, transparent, ${rarityColors[itemData.rarity]}20, transparent)`,
+          transform: "translateX(-100%)",
+          animation: "shimmer 6s infinite",
+          pointerEvents: "none",
+          zIndex: 1
+        }
       }, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(Box, { sx: {
           display: "flex",
@@ -32179,7 +32208,7 @@ const Tooltip$1 = ({ item, anchorEl, onClose }) => {
               }
             )
           ] }),
-          itemData.price > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          isShop && itemData.price > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
             Typography,
             {
               sx: {
@@ -32855,7 +32884,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
     setShowSplit(false);
   }, [item, slot, owner, invType, dispatch]);
   const durabilityColor = reactExports.useMemo(() => {
-    if (!durability) return "#8685EF";
+    if (!durability) return "#9f5cd6";
     if (durability >= 75) return "#52984a";
     if (durability >= 50) return "#f09348";
     return "#6e1616";
@@ -32877,20 +32906,32 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
         sx: {
           width: "100%",
           height: "8.68vh",
-          background: isBroken ? "linear-gradient(135deg, rgba(110, 22, 22, 0.8), rgba(110, 22, 22, 0.4))" : "radial-gradient(50% 50% at 50% 50%, rgba(68, 68, 68, 0.05) 0%, rgba(182, 182, 182, 0.08) 100%)",
-          border: `1px solid ${rarityRGB ? `rgba(${rarityRGB}, 0.5)` : colors.primary.alpha(0.2)}`,
+          background: isBroken ? "linear-gradient(135deg, rgba(110, 22, 22, 0.9), rgba(110, 22, 22, 0.6))" : "linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(15, 15, 15, 0.85) 50%, rgba(10, 10, 10, 0.85) 100%)",
+          border: `2px solid ${rarityRGB ? `rgba(${rarityRGB}, 0.4)` : colors.primary.alpha(0.3)}`,
           borderRadius: "0.63vw",
           position: "relative",
           opacity: isBeingDragged ? 0.35 : 1,
-          boxShadow: rarityRGB ? `0 4px 16px rgba(${rarityRGB}, 0.15)` : "none",
-          transition: "transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease",
+          boxShadow: rarityRGB ? `0 4px 16px rgba(${rarityRGB}, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)` : `0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+          transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
           cursor: !isEmpty2 ? "pointer" : "default",
           willChange: isBeingDragged ? "opacity" : "auto",
+          overflow: "hidden",
+          "&::before": !isEmpty2 ? {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "2px",
+            background: `linear-gradient(90deg, transparent, ${rarityRGB ? `rgba(${rarityRGB}, 0.6)` : "rgba(159, 92, 214, 0.6)"}, transparent)`,
+            animation: "borderShine 3s ease-in-out infinite",
+            zIndex: 10
+          } : void 0,
           "&:hover": {
-            background: !isEmpty2 && !isBroken ? `radial-gradient(50% 50% at 50% 50%, ${colors.primary.alpha(0.1)} 0%, ${colors.primary.alpha(0.22)} 100%)` : isBroken ? "linear-gradient(135deg, rgba(110, 22, 22, 1), rgba(110, 22, 22, 0.6))" : void 0,
-            transform: !isEmpty2 ? "scale(1.02)" : "none",
-            boxShadow: rarityRGB ? `0 8px 24px rgba(${rarityRGB}, 0.25)` : "none",
-            borderColor: rarityRGB ? `rgba(${rarityRGB}, 0.7)` : void 0
+            background: !isEmpty2 && !isBroken ? `linear-gradient(135deg, rgba(159, 92, 214, 0.2) 0%, rgba(122, 59, 179, 0.2) 50%, rgba(159, 92, 214, 0.2) 100%)` : isBroken ? "linear-gradient(135deg, rgba(110, 22, 22, 1), rgba(110, 22, 22, 0.7))" : void 0,
+            transform: !isEmpty2 ? "scale(1.05)" : "none",
+            boxShadow: rarityRGB ? `0 8px 28px rgba(${rarityRGB}, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)` : `0 8px 28px rgba(159, 92, 214, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+            borderColor: rarityRGB ? `rgba(${rarityRGB}, 0.8)` : colors.primary.alpha(0.8)
           }
         },
         children: !isEmpty2 && itemData && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -33008,18 +33049,22 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
                 position: "absolute",
                 top: 0,
                 left: 0,
-                padding: "0 0.26vw",
-                width: "1.04vw",
-                fontSize: "0.83vh",
+                padding: "0.4vh 0.5vw",
+                minWidth: "1.3vw",
+                fontSize: "1vh",
                 fontFamily: "Rubik, sans-serif",
-                fontWeight: 600,
-                textShadow,
-                color: colors.primary.main,
-                background: colors.secondary.dark,
-                borderRight: `1px solid ${colors.primary.alpha(0.3)}`,
-                borderBottom: `1px solid ${colors.primary.alpha(0.3)}`,
-                borderBottomRightRadius: "0.42vw",
-                borderTopLeftRadius: "0.57vw",
+                fontWeight: 800,
+                textAlign: "center",
+                textShadow: `0 0 12px ${colors.primary.alpha(1)}, 0 2px 4px rgba(0, 0, 0, 0.8)`,
+                color: "#ffffff",
+                background: `linear-gradient(135deg, ${colors.primary.main} 0%, ${colors.primary.dark} 100%)`,
+                border: `2px solid ${colors.primary.light}`,
+                borderRight: `3px solid ${colors.primary.alpha(0.8)}`,
+                borderBottom: `3px solid ${colors.primary.alpha(0.8)}`,
+                borderTopLeftRadius: "12px",
+                borderBottomRightRadius: "8px",
+                boxShadow: `0 0 16px ${colors.primary.alpha(0.6)}, 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset -1px 0 0 rgba(255, 255, 255, 0.1)`,
+                backdropFilter: "blur(4px)",
                 zIndex: 4
               },
               children: slot
@@ -33087,7 +33132,8 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }) => {
       {
         item,
         anchorEl: tooltipAnchor,
-        onClose: () => setTooltipAnchor(null)
+        onClose: () => setTooltipAnchor(null),
+        isShop: secondary?.shop === true && owner === secondary?.owner
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -33169,8 +33215,8 @@ const UseButton = () => {
     {
       onMouseUp: handleUseItem,
       sx: {
-        width: "12.96vh",
-        height: "12.96vh",
+        width: "11vh",
+        height: "11vh",
         position: "absolute",
         top: 0,
         bottom: 0,
@@ -33181,22 +33227,34 @@ const UseButton = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "1.11vh",
-        background: colors.inventory.background,
+        gap: "0.8vh",
+        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(15, 15, 15, 0.95) 50%, rgba(10, 10, 10, 0.95) 100%)",
         border: `2px solid ${colors.primary.alpha(0.4)}`,
-        borderRadius: "0.63vw",
-        boxShadow: `0 0 20px ${colors.primary.alpha(0.3)}, inset 0 0 20px ${colors.primary.alpha(0.1)}`,
-        transition: "all 0.2s ease",
+        borderRadius: "12px",
+        boxShadow: `0 8px 32px rgba(0, 0, 0, 0.9), 0 0 40px ${colors.primary.alpha(0.3)}, inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+        transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
         cursor: "pointer",
         zIndex: 9999,
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.8)}, transparent)`,
+          animation: "borderShine 3s ease-in-out infinite",
+          zIndex: 1
+        },
         "&:hover": {
-          background: colors.grey.main,
-          borderColor: colors.primary.alpha(0.8),
-          boxShadow: `0 0 30px ${colors.primary.alpha(0.5)}, inset 0 0 30px ${colors.primary.alpha(0.2)}`,
-          transform: "scale(1.05)"
+          background: `linear-gradient(135deg, rgba(159, 92, 214, 0.25) 0%, rgba(122, 59, 179, 0.25) 50%, rgba(159, 92, 214, 0.25) 100%)`,
+          borderColor: colors.primary.alpha(1),
+          boxShadow: `0 8px 40px rgba(0, 0, 0, 0.9), 0 0 60px ${colors.primary.alpha(0.6)}, inset 0 1px 0 rgba(255, 255, 255, 0.15)`,
+          transform: "scale(1.08)"
         },
         "&:active": {
-          transform: "scale(0.98)"
+          transform: "scale(0.95)"
         }
       },
       children: [
@@ -33204,7 +33262,7 @@ const UseButton = () => {
           Fingerprint,
           {
             sx: {
-              fontSize: "4.44vh",
+              fontSize: "3.8vh",
               color: colors.primary.main,
               filter: `drop-shadow(0 0 12px ${colors.primary.alpha(0.6)})`
             }
@@ -33214,7 +33272,7 @@ const UseButton = () => {
           Typography,
           {
             sx: {
-              fontSize: "0.97vh",
+              fontSize: "1vh",
               fontWeight: 700,
               fontFamily: "Rubik, sans-serif",
               color: colors.primary.main,
@@ -33287,10 +33345,10 @@ const GiveButton = () => {
     {
       onMouseUp: handleMouseUp,
       sx: {
-        width: "12.96vh",
-        height: "12.96vh",
+        width: "11vh",
+        height: "11vh",
         position: "absolute",
-        top: "calc(50% + 9.26vh)",
+        top: "calc(50% + 8vh)",
         left: 0,
         right: 0,
         margin: "0 auto",
@@ -33298,22 +33356,34 @@ const GiveButton = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "1.11vh",
-        background: colors.inventory.background,
+        gap: "0.8vh",
+        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(15, 15, 15, 0.95) 50%, rgba(10, 10, 10, 0.95) 100%)",
         border: `2px solid ${colors.primary.alpha(0.4)}`,
-        borderRadius: "0.63vw",
-        boxShadow: `0 0 20px ${colors.primary.alpha(0.3)}, inset 0 0 20px ${colors.primary.alpha(0.1)}`,
-        transition: "all 0.2s ease",
+        borderRadius: "12px",
+        boxShadow: `0 8px 32px rgba(0, 0, 0, 0.9), 0 0 40px ${colors.primary.alpha(0.3)}, inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+        transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
         cursor: "pointer",
         zIndex: 9999,
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.8)}, transparent)`,
+          animation: "borderShine 3s ease-in-out infinite",
+          zIndex: 1
+        },
         "&:hover": {
-          background: colors.grey.main,
-          borderColor: colors.primary.alpha(0.8),
-          boxShadow: `0 0 30px ${colors.primary.alpha(0.5)}, inset 0 0 30px ${colors.primary.alpha(0.2)}`,
-          transform: "scale(1.05)"
+          background: `linear-gradient(135deg, rgba(159, 92, 214, 0.25) 0%, rgba(122, 59, 179, 0.25) 50%, rgba(159, 92, 214, 0.25) 100%)`,
+          borderColor: colors.primary.alpha(1),
+          boxShadow: `0 8px 40px rgba(0, 0, 0, 0.9), 0 0 60px ${colors.primary.alpha(0.6)}, inset 0 1px 0 rgba(255, 255, 255, 0.15)`,
+          transform: "scale(1.08)"
         },
         "&:active": {
-          transform: "scale(0.98)"
+          transform: "scale(0.95)"
         }
       },
       children: [
@@ -33321,7 +33391,7 @@ const GiveButton = () => {
           PanTool,
           {
             sx: {
-              fontSize: "4.44vh",
+              fontSize: "3.8vh",
               color: colors.primary.main,
               filter: `drop-shadow(0 0 12px ${colors.primary.alpha(0.6)})`
             }
@@ -33331,7 +33401,7 @@ const GiveButton = () => {
           Typography,
           {
             sx: {
-              fontSize: "0.97vh",
+              fontSize: "1vh",
               fontWeight: 700,
               fontFamily: "Rubik, sans-serif",
               color: colors.primary.main,
@@ -33596,9 +33666,9 @@ const ShopItemCardComponent = ({ item }) => {
           flexDirection: "column",
           width: "100%",
           height: "20.83vh",
-          background: `radial-gradient(circle at center, ${rarityColor}15 0%, transparent 70%)`,
-          border: `1px solid ${rarityColor}40`,
-          borderRadius: "0.63vw",
+          background: `linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(15, 15, 15, 0.8) 50%, rgba(10, 10, 10, 0.8) 100%)`,
+          border: `2px solid ${rarityColor}40`,
+          borderRadius: "12px",
           overflow: "hidden",
           transition: "transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease",
           cursor: "pointer",
@@ -33606,10 +33676,22 @@ const ShopItemCardComponent = ({ item }) => {
           willChange: "transform",
           containIntrinsicSize: "19.44vh",
           contentVisibility: "auto",
+          boxShadow: `0 4px 12px rgba(0, 0, 0, 0.6), 0 0 20px ${rarityColor}20, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "2px",
+            background: `linear-gradient(90deg, transparent, ${rarityColor}, transparent)`,
+            animation: "borderShine 3s ease-in-out infinite",
+            zIndex: 10
+          },
           "&:hover": {
             transform: "scale(1.02)",
-            borderColor: `${rarityColor}60`,
-            boxShadow: `0 4px 12px ${rarityColor}30`
+            borderColor: `${rarityColor}80`,
+            boxShadow: `0 8px 20px rgba(0, 0, 0, 0.8), 0 0 30px ${rarityColor}40, inset 0 1px 0 rgba(255, 255, 255, 0.1)`
           }
         },
         children: [
@@ -34443,18 +34525,47 @@ const CartFooter = () => {
   );
 };
 const ShoppingCart = () => {
+  const cart = useAppSelector((state) => state.inventory.cart);
+  const paymentMethod = useAppSelector((state) => state.inventory.paymentMethod);
+  const showShimmer = cart.length > 0 && paymentMethod !== null;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     Box,
     {
       sx: {
+        position: "relative",
         width: "100%",
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: colors.inventory.background,
-        border: `1px solid ${colors.primary.alpha(0.3)}`,
-        borderRadius: "0.26vw",
-        overflow: "hidden"
+        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(15, 15, 15, 0.9) 50%, rgba(10, 10, 10, 0.9) 100%)",
+        border: `2px solid ${colors.primary.alpha(0.4)}`,
+        borderRadius: "12px",
+        overflow: "hidden",
+        boxShadow: `0 4px 16px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.6)}, transparent)`,
+          animation: "borderShine 3s ease-in-out infinite",
+          zIndex: 10
+        },
+        "&::after": showShimmer ? {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.1)}, transparent)`,
+          transform: "translateX(-100%)",
+          animation: "shimmer 6s infinite",
+          pointerEvents: "none",
+          zIndex: 1
+        } : void 0
       },
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(CartHeader, {}),
@@ -34480,12 +34591,25 @@ const ShopLayout = () => {
           Box,
           {
             sx: {
+              position: "relative",
               width: "65%",
               height: "100%",
-              background: colors.inventory.background,
-              border: `1px solid ${colors.primary.alpha(0.3)}`,
-              borderRadius: "0.26vw",
-              overflow: "hidden"
+              background: "linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(10, 10, 10, 0.95) 50%, rgba(8, 8, 8, 0.95) 100%)",
+              border: `2px solid ${colors.primary.alpha(0.4)}`,
+              borderRadius: "12px",
+              overflow: "hidden",
+              boxShadow: `0 4px 16px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "2px",
+                background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.6)}, transparent)`,
+                animation: "borderShine 3s ease-in-out infinite",
+                zIndex: 10
+              }
             },
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShopItems, {})
           }
@@ -34522,19 +34646,31 @@ const SegmentedWeightBar = ({ currentWeight, maxWeight }) => {
     width: "10.6771vw",
     height: "1.8519vh",
     borderRadius: ".1563vw",
-    border: `1px solid ${colors.text.primary}`,
-    borderOpacity: 0.055,
+    border: `2px solid ${colors.primary.alpha(0.3)}`,
     background: colors.grey.alpha(0.15),
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    overflow: "hidden"
   }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Box, { sx: {
       width: `${fillPercent}%`,
       height: "100%",
       position: "absolute",
       left: 0,
-      overflow: "hidden"
+      overflow: "hidden",
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.3)}, transparent)`,
+        transform: "translateX(-100%)",
+        animation: "shimmer 3s infinite",
+        pointerEvents: "none"
+      }
     }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "svg",
       {
@@ -34658,7 +34794,8 @@ const Inventory = () => {
                           sx: {
                             display: "grid",
                             gridTemplateColumns: "repeat(5, 8.68vh)",
-                            gap: "0.74vh"
+                            gap: "0.9vh",
+                            padding: "0.5vh"
                           },
                           children: hotbarSlots.map((slotNumber) => {
                             const item = playerInv.find((i) => i?.Slot === slotNumber) || null;
@@ -34726,7 +34863,8 @@ const Inventory = () => {
                             gap: "0.74vh",
                             maxHeight: "calc(60vh - 90px)",
                             overflowY: "scroll",
-                            paddingRight: "0.74vh",
+                            overflowX: "visible",
+                            padding: "1vh 0.74vh 0.5vh 0.5vh",
                             "&::-webkit-scrollbar": {
                               width: "0.37vh"
                             },
@@ -34810,7 +34948,8 @@ const Inventory = () => {
                           gap: "0.74vh",
                           maxHeight: "calc(60vh - 90px)",
                           overflowY: "scroll",
-                          paddingRight: "0.74vh",
+                          overflowX: "visible",
+                          padding: "1vh 0.74vh 0.5vh 0.5vh",
                           "&::-webkit-scrollbar": {
                             width: "0.37vh"
                           },
@@ -34961,6 +35100,8 @@ const HoverSlotComponent = () => {
               textShadow,
               background: colors.secondary.darkAlpha(0.9),
               borderTop: `1px solid ${colors.primary.alpha(0.2)}`,
+              borderBottomLeftRadius: "0.63vw",
+              borderBottomRightRadius: "0.63vw",
               overflow: "hidden",
               whiteSpace: "nowrap",
               textOverflow: "ellipsis",
@@ -35311,14 +35452,15 @@ const Reagent = ({ item, qty }) => {
         display: "flex",
         flexDirection: "column",
         gap: "0.8vh",
-        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.4), rgba(10, 10, 10, 0.2))",
-        border: hasItems ? `1px solid ${colors.primary.alpha(0.4)}` : "1px solid rgba(220, 53, 69, 0.4)",
-        borderRadius: "10px",
+        background: hasItems ? "linear-gradient(135deg, rgba(26, 26, 26, 0.6) 0%, rgba(15, 15, 15, 0.6) 50%, rgba(10, 10, 10, 0.6) 100%)" : "linear-gradient(135deg, rgba(40, 15, 15, 0.5) 0%, rgba(30, 10, 10, 0.5) 50%, rgba(20, 8, 8, 0.5) 100%)",
+        border: hasItems ? `2px solid ${colors.primary.alpha(0.4)}` : "2px solid rgba(220, 53, 69, 0.4)",
+        borderRadius: "12px",
         padding: "1vh",
         position: "relative",
         overflow: "hidden",
         transition: "all 0.2s ease",
         cursor: "pointer",
+        boxShadow: hasItems ? `0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05)` : "0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(220, 53, 69, 0.05)",
         "&::before": {
           content: '""',
           position: "absolute",
@@ -35326,12 +35468,14 @@ const Reagent = ({ item, qty }) => {
           left: 0,
           right: 0,
           height: "2px",
-          background: hasItems ? `linear-gradient(90deg, transparent 0%, ${colors.primary.alpha(0.6)} 50%, transparent 100%)` : "linear-gradient(90deg, transparent 0%, rgba(220, 53, 69, 0.6) 50%, transparent 100%)"
+          background: hasItems ? `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.6)}, transparent)` : "linear-gradient(90deg, transparent, rgba(220, 53, 69, 0.6), transparent)",
+          animation: "borderShine 3s ease-in-out infinite",
+          zIndex: 10
         },
         "&:hover": {
           transform: "translateY(-2px)",
           borderColor: hasItems ? colors.primary.alpha(0.6) : "rgba(220, 53, 69, 0.6)",
-          boxShadow: hasItems ? `0 4px 16px ${colors.primary.alpha(0.2)}` : "0 4px 16px rgba(220, 53, 69, 0.2)"
+          boxShadow: hasItems ? `0 8px 20px ${colors.primary.alpha(0.3)}, inset 0 1px 0 rgba(255, 255, 255, 0.1)` : "0 8px 20px rgba(220, 53, 69, 0.3), inset 0 1px 0 rgba(220, 53, 69, 0.1)"
         }
       },
       children: [
@@ -35550,16 +35694,42 @@ const Recipe = ({ index, recipe, cooldown }) => {
     Box,
     {
       sx: {
+        position: "relative",
         width: "100%",
         height: "100%",
-        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.6), rgba(10, 10, 10, 0.4))",
-        border: `1px solid ${colors.primary.alpha(0.3)}`,
+        background: "linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(15, 15, 15, 0.9) 50%, rgba(10, 10, 10, 0.9) 100%)",
+        border: `2px solid ${colors.primary.alpha(0.4)}`,
         borderRadius: "12px",
         padding: "1.5vw",
         display: "flex",
         flexDirection: "column",
         gap: "1.5vh",
-        overflow: "hidden"
+        overflow: "hidden",
+        boxShadow: `0 4px 16px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.6)}, transparent)`,
+          animation: "borderShine 3s ease-in-out infinite",
+          zIndex: 10
+        },
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.1)}, transparent)`,
+          transform: "translateX(-100%)",
+          animation: "shimmer 6s infinite",
+          pointerEvents: "none",
+          zIndex: 1
+        }
       },
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -35932,16 +36102,30 @@ const Crafting = () => {
         Box,
         {
           sx: {
-            background: colors.inventory.background,
-            borderRadius: "5px",
-            border: `1px solid ${colors.primary.alpha(0.3)}`,
+            position: "relative",
+            background: "linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(10, 10, 10, 0.95) 50%, rgba(8, 8, 8, 0.95) 100%)",
+            borderRadius: "12px",
+            border: `2px solid ${colors.primary.alpha(0.4)}`,
             padding: "1.5vw",
             display: "flex",
             flexDirection: "column",
             gap: "1.5vh",
             width: "85%",
             height: "75%",
-            maxWidth: "1400px"
+            maxWidth: "1400px",
+            overflow: "hidden",
+            boxShadow: `0 4px 16px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "2px",
+              background: `linear-gradient(90deg, transparent, ${colors.primary.alpha(0.6)}, transparent)`,
+              animation: "borderShine 3s ease-in-out infinite",
+              zIndex: 10
+            }
           },
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(Box, { sx: { display: "flex", gap: ".5208vw", alignItems: "center", mb: 1 }, children: [

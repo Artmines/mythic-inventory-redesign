@@ -464,7 +464,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
 
   // Memoize durability color calculation
   const durabilityColor = useMemo(() => {
-    if (!durability) return '#8685EF';
+    if (!durability) return '#9f5cd6';
     if (durability >= 75) return '#52984a';
     if (durability >= 50) return '#f09348';
     return '#6e1616';
@@ -490,27 +490,43 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
         width: '100%',
         height: '8.68vh',
         background: isBroken
-          ? 'linear-gradient(135deg, rgba(110, 22, 22, 0.8), rgba(110, 22, 22, 0.4))'
-          : 'radial-gradient(50% 50% at 50% 50%, rgba(68, 68, 68, 0.05) 0%, rgba(182, 182, 182, 0.08) 100%)',
-        border: `1px solid ${
-          rarityRGB ? `rgba(${rarityRGB}, 0.5)` : colors.primary.alpha(0.2)
+          ? 'linear-gradient(135deg, rgba(110, 22, 22, 0.9), rgba(110, 22, 22, 0.6))'
+          : 'linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(15, 15, 15, 0.85) 50%, rgba(10, 10, 10, 0.85) 100%)',
+        border: `2px solid ${
+          rarityRGB ? `rgba(${rarityRGB}, 0.4)` : colors.primary.alpha(0.3)
         }`,
         borderRadius: '0.63vw',
         position: 'relative',
         opacity: isBeingDragged ? 0.35 : 1,
-        boxShadow: rarityRGB ? `0 4px 16px rgba(${rarityRGB}, 0.15)` : 'none',
-        transition: 'transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease',
+        boxShadow: rarityRGB
+          ? `0 4px 16px rgba(${rarityRGB}, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)`
+          : `0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+        transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
         cursor: !isEmpty ? 'pointer' : 'default',
         willChange: isBeingDragged ? 'opacity' : 'auto',
+        overflow: 'hidden',
+        '&::before': !isEmpty ? {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '2px',
+          background: `linear-gradient(90deg, transparent, ${rarityRGB ? `rgba(${rarityRGB}, 0.6)` : 'rgba(159, 92, 214, 0.6)'}, transparent)`,
+          animation: 'borderShine 3s ease-in-out infinite',
+          zIndex: 10,
+        } : undefined,
         '&:hover': {
           background: !isEmpty && !isBroken
-            ? `radial-gradient(50% 50% at 50% 50%, ${colors.primary.alpha(0.1)} 0%, ${colors.primary.alpha(0.22)} 100%)`
+            ? `linear-gradient(135deg, rgba(159, 92, 214, 0.2) 0%, rgba(122, 59, 179, 0.2) 50%, rgba(159, 92, 214, 0.2) 100%)`
             : isBroken
-            ? 'linear-gradient(135deg, rgba(110, 22, 22, 1), rgba(110, 22, 22, 0.6))'
+            ? 'linear-gradient(135deg, rgba(110, 22, 22, 1), rgba(110, 22, 22, 0.7))'
             : undefined,
-          transform: !isEmpty ? 'scale(1.02)' : 'none',
-          boxShadow: rarityRGB ? `0 8px 24px rgba(${rarityRGB}, 0.25)` : 'none',
-          borderColor: rarityRGB ? `rgba(${rarityRGB}, 0.7)` : undefined,
+          transform: !isEmpty ? 'scale(1.05)' : 'none',
+          boxShadow: rarityRGB
+            ? `0 8px 28px rgba(${rarityRGB}, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)`
+            : `0 8px 28px rgba(159, 92, 214, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+          borderColor: rarityRGB ? `rgba(${rarityRGB}, 0.8)` : colors.primary.alpha(0.8),
         },
       }}
     >
@@ -624,18 +640,22 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                padding: '0 0.26vw',
-                width: '1.04vw',
-                fontSize: '0.83vh',
+                padding: '0.4vh 0.5vw',
+                minWidth: '1.3vw',
+                fontSize: '1vh',
                 fontFamily: 'Rubik, sans-serif',
-                fontWeight: 600,
-                textShadow,
-                color: colors.primary.main,
-                background: colors.secondary.dark,
-                borderRight: `1px solid ${colors.primary.alpha(0.3)}`,
-                borderBottom: `1px solid ${colors.primary.alpha(0.3)}`,
-                borderBottomRightRadius: '0.42vw',
-                borderTopLeftRadius: '0.57vw',
+                fontWeight: 800,
+                textAlign: 'center',
+                textShadow: `0 0 12px ${colors.primary.alpha(1)}, 0 2px 4px rgba(0, 0, 0, 0.8)`,
+                color: '#ffffff',
+                background: `linear-gradient(135deg, ${colors.primary.main} 0%, ${colors.primary.dark} 100%)`,
+                border: `2px solid ${colors.primary.light}`,
+                borderRight: `3px solid ${colors.primary.alpha(0.8)}`,
+                borderBottom: `3px solid ${colors.primary.alpha(0.8)}`,
+                borderTopLeftRadius: '12px',
+                borderBottomRightRadius: '8px',
+                boxShadow: `0 0 16px ${colors.primary.alpha(0.6)}, 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset -1px 0 0 rgba(255, 255, 255, 0.1)`,
+                backdropFilter: 'blur(4px)',
                 zIndex: 4,
               }}
             >
@@ -707,6 +727,7 @@ const SlotComponent = ({ slot, item, invType, owner, disabled = false }: SlotPro
       item={item}
       anchorEl={tooltipAnchor}
       onClose={() => setTooltipAnchor(null)}
+      isShop={secondary?.shop === true && owner === secondary?.owner}
     />
 
     <SplitDialog
