@@ -203,6 +203,14 @@ RegisterNetEvent("Inventory:Client:Cache", function(inventory, refresh)
 		})
 	end
 
+	-- Keep hotbar data in sync so TAB shows current items in slots 1-5
+	SendNUIMessage({
+		type = 'HOTBAR_UPDATE',
+		data = {
+			items = GetHBItems(),
+		},
+	})
+
 	if refresh then
 		TriggerEvent("Weapons:Client:Attach")
 	end

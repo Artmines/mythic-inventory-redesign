@@ -86,6 +86,9 @@ function App() {
         case 'HOTBAR_HIDE':
           dispatch(appActions.hideHotbar());
           break;
+        case 'HOTBAR_UPDATE':
+          dispatch(appActions.setHotbarItems((message.data as any).items || []));
+          break;
         case 'SET_EQUIPPED':
           dispatch(appActions.setEquipped(message.data as any));
           break;
