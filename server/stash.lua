@@ -41,45 +41,51 @@ function RegisterStashCallbacks()
 			return
 		end
 
-		-- Validate shop exists
-		if not shopLocations[data.shopOwner] then
+		local shopData = shopLocations[data.shopOwner]
+		local entityType = data.shopInvType and LoadedEntitys[tonumber(data.shopInvType)] or nil
+		local isPolyShop = (not shopData and entityType and entityType.shop)
+
+		if not shopData and not isPolyShop then
 			Execute:Client(source, "Notification", "Error", "Invalid Shop")
 			cb(false)
 			return
 		end
 
-		-- Validate total price matches
-		local calculatedTotal = 0
-		for _, item in ipairs(data.items) do
-			local itemDef = itemsDatabase[item.itemName]
-			if itemDef and itemDef.price then
-				calculatedTotal = calculatedTotal + (itemDef.price * item.quantity)
+		local isFreeShop = (entityType and entityType.free) or false
+
+		if not isFreeShop then
+			local calculatedTotal = 0
+			for _, item in ipairs(data.items) do
+				local itemDef = itemsDatabase[item.itemName]
+				if itemDef and itemDef.price then
+					calculatedTotal = calculatedTotal + (itemDef.price * item.quantity)
+				end
 			end
-		end
 
-		if math.abs(calculatedTotal - data.totalPrice) > 0.01 then
-			Execute:Client(source, "Notification", "Error", "Price Mismatch")
-			cb(false)
-			return
-		end
+			if math.abs(calculatedTotal - data.totalPrice) > 0.01 then
+				Execute:Client(source, "Notification", "Error", "Price Mismatch")
+				cb(false)
+				return
+			end
 
-		-- Process payment
-		local paid = false
-		if data.paymentMethod == 'cash' then
-			paid = Wallet:Modify(source, -(math.abs(data.totalPrice)))
-		elseif data.paymentMethod == 'bank' then
-			paid = Banking.Balance:Charge(char:GetData("BankAccount"), data.totalPrice, {
-				type = 'bill',
-				title = 'Shop Purchase',
-				description = string.format('Shop purchase for $%s', data.totalPrice),
-				data = {}
-			})
-		end
+			-- Process payment
+			local paid = false
+			if data.paymentMethod == 'cash' then
+				paid = Wallet:Modify(source, -(math.abs(data.totalPrice)))
+			elseif data.paymentMethod == 'bank' then
+				paid = Banking.Balance:Charge(char:GetData("BankAccount"), data.totalPrice, {
+					type = 'bill',
+					title = 'Shop Purchase',
+					description = string.format('Shop purchase for $%s', data.totalPrice),
+					data = {}
+				})
+			end
 
-		if not paid then
-			Execute:Client(source, "Notification", "Error", "Insufficient Funds")
-			cb(false)
-			return
+			if not paid then
+				Execute:Client(source, "Notification", "Error", "Insufficient Funds")
+				cb(false)
+				return
+			end
 		end
 
 		-- Add items to player inventory using shop purchase flow
